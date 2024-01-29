@@ -158,21 +158,19 @@ select {
 
 body,
 html {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+
   background-color: #000;
 }
 
 #board {
-  background: url("../src/background.png") no-repeat center center;
+  background: url("../src/background.png") no-repeat ;
   position: relative;
   background-size:  contain;
-  height: 80vh;
-  width: 80vw;
+  /* height: 80vh;
+  width: 80vw; */
+  height: 600px;
+  width: 600px;
+  overflow: hidden;
 }
 
 
