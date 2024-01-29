@@ -71,6 +71,8 @@ class InteractiveObject {
 
     // Object creator
     this.addObject();
+
+    // this.infoBoard.innerHTML = ""
   }
 
   addObject() {
@@ -102,22 +104,42 @@ class InteractiveObject {
 
   // route to indiviual object interaction
   interactWithObject(objectName) {
-    // Lamp 1
+    this.infoBoardMessage = document.getElementById("message");
+    this.userActionInfo = document.querySelector(".useraction-info")
+    this.userActionInfo.style.display = "flex"
+
+
     switch (objectName) {
       case "tv":
         console.log("TV");
+        this.infoBoardMessage.innerText = "Interfere the TV";
+
         break;
-        case "lamp-top-left":
-          console.log("Lamp top right");
-          break
-        case "lamp-right":
-          console.log("Lamp right");
-          break
-        case "pen":
-          console.log("PEN");
-          break
-        
-      }
+      case "lamp-top-left":
+        console.log("Lamp top right");
+        this.infoBoardMessage.innerText = "Turn off the Standing lamp";
+        break;
+      case "lamp-right":
+        console.log("Lamp right");
+        this.infoBoardMessage.innerText = "Turn off the light";
+        break;
+      case "pen":
+        console.log("PEN");
+        this.infoBoardMessage.innerText = "Throw down the pen";
+        break;
+    }
+  }
+
+  // default Infoboard
+  resetInfoboard() {
+    // remove Interaction message
+    this.infoBoardMessage = document.getElementById("message");
+    this.infoBoardMessage.innerText = "";
+
+    // remove Spacebar message
+    this.userActionInfo = document.querySelector(".useraction-info")
+    this.userActionInfo.style.display = "none"
+
   }
 }
 
@@ -177,27 +199,30 @@ window.addEventListener("keydown", function (event) {
   // Interaction with Objects
   //////////////////////////////
 
-  // Add a flag that indicates if an interaction is happening
+  // Set isMessageVisible to false at the beginning of each interaction check
+  isMessageVisible = false;
+
+  // Iterate over objectCollection
   objectCollection.forEach((objElm) => {
     if (
-      !objElm.hasInteracted &&
       player.x - player.width / 2 < objElm.x + objElm.width / 2 &&
       player.x + player.width / 2 > objElm.x - objElm.width / 2 &&
       player.y - player.height / 2 < objElm.y + objElm.height / 2 &&
       player.y + player.height / 2 > objElm.y - objElm.height / 2
     ) {
-      // console.log("Interaction with", objElm.customClass);
-      objElm.hasInteracted = true; // Set the flag indicating interaction has occurred
-
-      // start interaction method
-      objElm.interactWithObject(objElm.customClass);
-    } else if (
-      player.x + player.width / 2 < objElm.x - objElm.width / 2 ||
-      player.x - player.width / 2 > objElm.x + objElm.width / 2 ||
-      player.y + player.height / 2 < objElm.y - objElm.height / 2 ||
-      player.y - player.height / 2 > objElm.y + objElm.height / 2
-    ) {
-      objElm.hasInteracted = false; // Reset the interaction flag when no longer overlapping
+      if (!objElm.hasInteracted) {
+        objElm.interactWithObject(objElm.customClass);
+        objElm.hasInteracted = true; // Interaction occurs only once per overlap
+      }
+      isMessageVisible = true; // Message is visible because there's an overlap
+    } else {
+      objElm.hasInteracted = false; // Leaving the object resets interaction state
     }
   });
+
+  // Reset the infoBoardMessage only if no message is currently being displayed by an overlap
+  if (!isMessageVisible) {
+    // Assuming resetInfoboard exists on every object, but this can be a standalone function instead
+    new InteractiveObject().resetInfoboard(); // Clear the message if not within an interactive area
+  }
 });

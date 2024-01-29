@@ -158,8 +158,10 @@ select {
 
 body,
 html {
-
+  font-size: 16px;
   background-color: #000;
+  color: #fff;
+  font-family: 'Passion One', sans-serif;
 }
 
 #board {
@@ -182,7 +184,26 @@ html {
 
 .interactiveObj {
     box-sizing:content-box;
-    border: 1px solid #18b01d;
+    /* border: 1px solid #18b01d; */
     /* padding: 10px; */
 }
 
+#infoboard {
+  height: 80px;
+  width: 600px;
+  background-color: #482515;
+  
+  display: flex;
+  flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.useraction-info {
+  font-size: 1em;
+  display: none;
+}
+
+#message {
+  font-size: 2em;
+}
