@@ -5,6 +5,8 @@ class Ghost {
     this.heigth = 30;
     this.width = 30;
     this.characterStartup();
+
+    this.speed = 8
   }
 
   characterStartup() {
@@ -27,25 +29,25 @@ class Ghost {
 
   moveUp() {
     if (this.ghost.getBoundingClientRect().top > 45) {
-      this.y -= 10;
+      this.y -= this.speed;
       this.ghost.style.top = this.y - this.width / 2 + "px";
     }
   }
   moveDown() {
     if (this.ghost.getBoundingClientRect().bottom < 525) {
-      this.y += 10;
+      this.y += this.speed;
       this.ghost.style.top = this.y - this.width / 2 + "px";
     }
   }
   moveLeft() {
     if (this.ghost.getBoundingClientRect().left > 50) {
-      this.x -= 10;
+      this.x -= this.speed;
       this.ghost.style.left = this.x - this.width / 2 + "px";
     }
   }
   moveRight() {
     if (this.ghost.getBoundingClientRect().right < 535) {
-      this.x += 10;
+      this.x += this.speed;
       this.ghost.style.left = this.x - this.width / 2 + "px";
     }
   }
@@ -55,7 +57,7 @@ class Ghost {
 // Object Class
 //////////////////////////////
 class InteractiveObject {
-  constructor(width, height, posY, posX, name) {
+  constructor(height, width, posY, posX, name) {
     this.width = width;
     this.height = height;
     this.y = posY;
@@ -78,20 +80,20 @@ class InteractiveObject {
     // size
     this.object.style.width = this.width + "px";
     this.object.style.height = this.height + "px";
-    // console.log(this.customClass, "Width", this.object.width);
-    // console.log(this.customClass, "Height", this.object.height);
+
 
     // position top/left
     this.object.style.position = "absolute";
-  
-    this.object.style.top = this.y - (this.height / 2)+ "px";
-    this.object.style.left = this.x - (this.width / 2) + "px";
+
+    this.object.style.top = this.y - this.height / 2 + "px";
+    this.object.style.left = this.x - this.width / 2 + "px";
 
     // place object
     this.board = document.getElementById("board");
     this.board.appendChild(this.object);
 
-    console.log(this.object);
+    // push object to the array objectColletion
+    objectCollection.push(this)
   }
 }
 
@@ -108,7 +110,14 @@ class NPC {
 //////////////////////////////
 
 const player = new Ghost();
+const objectCollection = [];
+
 const lamp1 = new InteractiveObject(60, 60, 90, 70, "lamp-top-left");
+const lamp2 = new InteractiveObject(50, 50, 260, 525, "lamp-right");
+const tv = new InteractiveObject(100, 240, 480, 290, "tv");
+const pen = new InteractiveObject(90, 50, 325, 60, "pen");
+
+console.log(objectCollection);
 // const npc = new NPC();
 
 //////////////////////////////
@@ -135,3 +144,10 @@ window.addEventListener("keydown", function (event) {
       break;
   }
 });
+
+
+
+//////////////////////////////
+// Interaction with Objects
+//////////////////////////////
+
