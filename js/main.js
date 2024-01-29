@@ -66,6 +66,10 @@ class InteractiveObject {
     // option for custome class
     this.customClass = name;
 
+    // interaction checker
+    this.hasInteracted = false;
+
+    // Object creator
     this.addObject();
   }
 
@@ -75,7 +79,8 @@ class InteractiveObject {
     this.object.setAttribute("class", "interactiveObj");
 
     // add custom class
-    this.object.classList.add(this.customClass);
+    // this.object.classList.add(this.customClass);
+    this.object.setAttribute("id", this.customClass);
 
     // size
     this.object.style.width = this.width + "px";
@@ -95,10 +100,25 @@ class InteractiveObject {
     objectCollection.push(this);
   }
 
-  interactWithObject(objectName){
-
+  // route to indiviual object interaction
+  interactWithObject(objectName) {
+    // Lamp 1
+    switch (objectName) {
+      case "tv":
+        console.log("TV");
+        break;
+        case "lamp-top-left":
+          console.log("Lamp top right");
+          break
+        case "lamp-right":
+          console.log("Lamp right");
+          break
+        case "pen":
+          console.log("PEN");
+          break
+        
+      }
   }
-
 }
 
 //////////////////////////////
@@ -108,10 +128,6 @@ class InteractiveObject {
 class NPC {
   constructor() {}
 }
-
-
-
-
 
 //////////////////////////////
 // Game init
@@ -132,11 +148,8 @@ const pen = new InteractiveObject(100, 65, 335, 70, "pen");
 console.log(objectCollection);
 // const npc = new NPC();
 
-
-
-
 //////////////////////////////
-// Gane loop update 
+// Gane loop update
 // ---------------------------
 // Controls
 //////////////////////////////
@@ -165,28 +178,26 @@ window.addEventListener("keydown", function (event) {
   //////////////////////////////
 
   // Add a flag that indicates if an interaction is happening
-  let interactionHappening = false;
-
-  // Inside the keydown event listener, after moving the player and before handling interactions
   objectCollection.forEach((objElm) => {
-    const overlapping =
+    if (
+      !objElm.hasInteracted &&
       player.x - player.width / 2 < objElm.x + objElm.width / 2 &&
       player.x + player.width / 2 > objElm.x - objElm.width / 2 &&
       player.y - player.height / 2 < objElm.y + objElm.height / 2 &&
-      player.y + player.height / 2 > objElm.y - objElm.height / 2;
+      player.y + player.height / 2 > objElm.y - objElm.height / 2
+    ) {
+      // console.log("Interaction with", objElm.customClass);
+      objElm.hasInteracted = true; // Set the flag indicating interaction has occurred
 
-    if (overlapping) {
-      if (!interactionHappening) {
-        console.log("Interaction")
-        interactionHappening = true;
-
-        console.log(objElm.customClass);
-
-      }
-    } else if (interactionHappening) {
-      console.log("End of Interaction");
-      interactionHappening = false;
+      // start interaction method
+      objElm.interactWithObject(objElm.customClass);
+    } else if (
+      player.x + player.width / 2 < objElm.x - objElm.width / 2 ||
+      player.x - player.width / 2 > objElm.x + objElm.width / 2 ||
+      player.y + player.height / 2 < objElm.y - objElm.height / 2 ||
+      player.y - player.height / 2 > objElm.y + objElm.height / 2
+    ) {
+      objElm.hasInteracted = false; // Reset the interaction flag when no longer overlapping
     }
   });
-
 });
