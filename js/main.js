@@ -2,11 +2,11 @@ class Ghost {
   constructor() {
     this.x = 300;
     this.y = 300;
-    this.heigth = 30;
+    this.height = 30;
     this.width = 30;
     this.characterStartup();
 
-    this.speed = 8
+    this.speed = 8;
   }
 
   characterStartup() {
@@ -15,7 +15,7 @@ class Ghost {
 
     // Ghost Size
     this.ghost.style.width = this.width + "px";
-    this.ghost.style.height = this.heigth + "px";
+    this.ghost.style.height = this.height + "px";
 
     // place Ghost
     this.board = document.getElementById("board");
@@ -23,7 +23,7 @@ class Ghost {
 
     // set position of Ghost
     this.ghost.style.position = "absolute";
-    this.ghost.style.top = this.x - this.heigth / 2 + "px";
+    this.ghost.style.top = this.x - this.height / 2 + "px";
     this.ghost.style.left = this.y - this.width / 2 + "px";
   }
 
@@ -81,7 +81,6 @@ class InteractiveObject {
     this.object.style.width = this.width + "px";
     this.object.style.height = this.height + "px";
 
-
     // position top/left
     this.object.style.position = "absolute";
 
@@ -93,8 +92,13 @@ class InteractiveObject {
     this.board.appendChild(this.object);
 
     // push object to the array objectColletion
-    objectCollection.push(this)
+    objectCollection.push(this);
   }
+
+  interactWithObject(objectName){
+
+  }
+
 }
 
 //////////////////////////////
@@ -105,27 +109,40 @@ class NPC {
   constructor() {}
 }
 
+
+
+
+
 //////////////////////////////
 // Game init
 //////////////////////////////
 
+// New player
 const player = new Ghost();
+
+// Array with all new objects
 const objectCollection = [];
 
-const lamp1 = new InteractiveObject(60, 60, 90, 70, "lamp-top-left");
-const lamp2 = new InteractiveObject(50, 50, 260, 525, "lamp-right");
-const tv = new InteractiveObject(100, 240, 480, 290, "tv");
-const pen = new InteractiveObject(90, 50, 325, 60, "pen");
+// objects (height, width, y, x, css className)
+const lamp1 = new InteractiveObject(80, 80, 100, 80, "lamp-top-left");
+const lamp2 = new InteractiveObject(60, 60, 270, 530, "lamp-right");
+const tv = new InteractiveObject(140, 260, 480, 300, "tv");
+const pen = new InteractiveObject(100, 65, 335, 70, "pen");
 
 console.log(objectCollection);
 // const npc = new NPC();
 
+
+
+
 //////////////////////////////
+// Gane loop update 
+// ---------------------------
+// Controls
 //////////////////////////////
 
-//Controls
 window.addEventListener("keydown", function (event) {
-  console.log("Ghost Position:", this.ghost.getBoundingClientRect());
+  //   console.log("Ghost Position:", this.ghost.getBoundingClientRect());
   switch (event.key) {
     case "ArrowUp":
       player.moveUp();
@@ -139,15 +156,37 @@ window.addEventListener("keydown", function (event) {
     case "ArrowRight":
       player.moveRight();
       break;
-    case "Spacebar":
+    case " ":
       player.interact();
       break;
   }
+  //////////////////////////////
+  // Interaction with Objects
+  //////////////////////////////
+
+  // Add a flag that indicates if an interaction is happening
+  let interactionHappening = false;
+
+  // Inside the keydown event listener, after moving the player and before handling interactions
+  objectCollection.forEach((objElm) => {
+    const overlapping =
+      player.x - player.width / 2 < objElm.x + objElm.width / 2 &&
+      player.x + player.width / 2 > objElm.x - objElm.width / 2 &&
+      player.y - player.height / 2 < objElm.y + objElm.height / 2 &&
+      player.y + player.height / 2 > objElm.y - objElm.height / 2;
+
+    if (overlapping) {
+      if (!interactionHappening) {
+        console.log("Interaction")
+        interactionHappening = true;
+
+        console.log(objElm.customClass);
+
+      }
+    } else if (interactionHappening) {
+      console.log("End of Interaction");
+      interactionHappening = false;
+    }
+  });
+
 });
-
-
-
-//////////////////////////////
-// Interaction with Objects
-//////////////////////////////
-

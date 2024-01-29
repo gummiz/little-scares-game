@@ -183,5 +183,5 @@ html {
 .interactiveObj {
     box-sizing:content-box;
     border: 1px solid #18b01d;
-    padding: 10px;
+    /* padding: 10px; */
 }

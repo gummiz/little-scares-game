@@ -1,3 +1,5 @@
+# Milestones
+
 1. Basics
     - [x]  Board with BG
     - [x]  Bounding box ([getBoundingClientRect()](https://www.youtube.com/watch?v=MKpZadkuT-0), [Browser support](https://caniuse.com/?search=getBoundingClientRect))
@@ -8,8 +10,10 @@
     - [ ]  Extra: Diagonal Movement ([Diagonal](https://stackoverflow.com/questions/14178782/how-can-i-make-my-character-move-diagonally))
     - [x]  respect bounding box
     - [x]  Eventlistener
-3. Environment
-    - [ ]  interaction with elements on the board
+3. Environment (Interactive Objects)
+    - [x]  create Object and add to board
+    - [x]  interaction with elements on the board
+    - [ ]  interaction triggers something
     - [ ]  if ghost triggers scare, person turns to POI
     - [ ]  person walks to POI
     - [ ]  Ghost visible / invisble when interacting
@@ -18,6 +22,7 @@
     - [ ]  add NPC
     - [ ]  place NPC
     - [ ]  Eventlistener
+    - [ ]  rotation and collision [[1]](https://gamedev.stackexchange.com/questions/173555/collision-detection-between-two-arrays-with-nested-loops-why-do-i-get-a-crash) [[2]](https://codeincomplete.com/articles/javascript-gauntlet-collision-detection/)
 5. Collision system & 
     - [ ]  if ghost is in POI and Visible = loose game
 6. UI
