@@ -184,7 +184,7 @@ html {
 
 .interactiveObj {
     box-sizing:content-box;
-    /* border: 1px solid #18b01d; */
+    border: 1px solid #18b01d;
     /* padding: 10px; */
 }
 
@@ -192,7 +192,8 @@ html {
   height: 80px;
   width: 600px;
   background-color: #482515;
-  
+  line-height: 2em;
+
   display: flex;
   flex-direction: column;
     align-items: center;
@@ -200,7 +201,7 @@ html {
 }
 
 .useraction-info {
-  font-size: 1em;
+  font-size: 1.2em;
   display: none;
 }
 

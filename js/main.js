@@ -105,9 +105,8 @@ class InteractiveObject {
   // route to indiviual object interaction
   interactWithObject(objectName) {
     this.infoBoardMessage = document.getElementById("message");
-    this.userActionInfo = document.querySelector(".useraction-info")
-    this.userActionInfo.style.display = "flex"
-
+    this.userActionInfo = document.querySelector(".useraction-info");
+    this.userActionInfo.style.display = "flex";
 
     switch (objectName) {
       case "tv":
@@ -137,9 +136,26 @@ class InteractiveObject {
     this.infoBoardMessage.innerText = "";
 
     // remove Spacebar message
-    this.userActionInfo = document.querySelector(".useraction-info")
-    this.userActionInfo.style.display = "none"
+    this.userActionInfo = document.querySelector(".useraction-info");
+    this.userActionInfo.style.display = "none";
+  }
 
+  triggerScare(objectName) {
+    // TV
+    switch (objectName.customClass) {
+      case "tv":
+        console.log("TV has a bug now");
+        break;
+      case "pen":
+        console.log("Pen is on the floor");
+        break;
+      case "lamp-top-left":
+        console.log("Standing lamp is turn off");
+        break;
+      case "lamp-right":
+        console.log("The light is off!");
+        break;
+    }
   }
 }
 
@@ -167,7 +183,6 @@ const lamp2 = new InteractiveObject(60, 60, 270, 530, "lamp-right");
 const tv = new InteractiveObject(140, 260, 480, 300, "tv");
 const pen = new InteractiveObject(100, 65, 335, 70, "pen");
 
-console.log(objectCollection);
 // const npc = new NPC();
 
 //////////////////////////////
@@ -192,9 +207,14 @@ window.addEventListener("keydown", function (event) {
       player.moveRight();
       break;
     case " ":
-      player.interact();
-      break;
+      const interactiveObject = objectCollection.find(
+        (objElm) => objElm.hasInteracted
+      );
+      if (interactiveObject) {
+        interactiveObject.triggerScare(interactiveObject); // Trigger the method when spacebar is pressed and player is in an interactive area
+      }
   }
+
   //////////////////////////////
   // Interaction with Objects
   //////////////////////////////
@@ -204,6 +224,9 @@ window.addEventListener("keydown", function (event) {
 
   // Iterate over objectCollection
   objectCollection.forEach((objElm) => {
+    // console.log(objElm.customClass, "Interacted:",objElm.hasInteracted);
+
+    // check collision
     if (
       player.x - player.width / 2 < objElm.x + objElm.width / 2 &&
       player.x + player.width / 2 > objElm.x - objElm.width / 2 &&
