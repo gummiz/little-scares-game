@@ -26,46 +26,97 @@ class Ghost {
   }
 
   moveUp() {
-    if (this.ghost.getBoundingClientRect().top > 40) {
+    if (this.ghost.getBoundingClientRect().top > 45) {
       this.y -= 10;
       this.ghost.style.top = this.y - this.width / 2 + "px";
     }
   }
   moveDown() {
-    if (this.ghost.getBoundingClientRect().bottom < 600) {
+    if (this.ghost.getBoundingClientRect().bottom < 525) {
       this.y += 10;
       this.ghost.style.top = this.y - this.width / 2 + "px";
     }
   }
   moveLeft() {
-    if (this.ghost.getBoundingClientRect().left > 35) {
+    if (this.ghost.getBoundingClientRect().left > 50) {
       this.x -= 10;
       this.ghost.style.left = this.x - this.width / 2 + "px";
     }
   }
   moveRight() {
-    if (this.ghost.getBoundingClientRect().right < 600) {
+    if (this.ghost.getBoundingClientRect().right < 535) {
       this.x += 10;
       this.ghost.style.left = this.x - this.width / 2 + "px";
     }
   }
 }
 
-class Environment {
-  constructor() {}
+//////////////////////////////
+// Object Class
+//////////////////////////////
+class InteractiveObject {
+  constructor(width, height, posY, posX, name) {
+    this.width = width;
+    this.height = height;
+    this.y = posY;
+    this.x = posX;
+
+    // option for custome class
+    this.customClass = name;
+
+    this.addObject();
+  }
+
+  addObject() {
+    // create new Element + add default class
+    this.object = document.createElement("div");
+    this.object.setAttribute("class", "interactiveObj");
+
+    // add custom class
+    this.object.classList.add(this.customClass);
+
+    // size
+    this.object.style.width = this.width + "px";
+    this.object.style.height = this.height + "px";
+    // console.log(this.customClass, "Width", this.object.width);
+    // console.log(this.customClass, "Height", this.object.height);
+
+    // position top/left
+    this.object.style.position = "absolute";
+  
+    this.object.style.top = this.y - (this.height / 2)+ "px";
+    this.object.style.left = this.x - (this.width / 2) + "px";
+
+    // place object
+    this.board = document.getElementById("board");
+    this.board.appendChild(this.object);
+
+    console.log(this.object);
+  }
 }
+
+//////////////////////////////
+// NPC Class
+//////////////////////////////
 
 class NPC {
   constructor() {}
 }
 
+//////////////////////////////
+// Game init
+//////////////////////////////
+
 const player = new Ghost();
-// const environment = new Environment());
+const lamp1 = new InteractiveObject(60, 60, 90, 70, "lamp-top-left");
 // const npc = new NPC();
+
+//////////////////////////////
+//////////////////////////////
 
 //Controls
 window.addEventListener("keydown", function (event) {
-    console.log("Ghost Position:", this.ghost.getBoundingClientRect());
+  console.log("Ghost Position:", this.ghost.getBoundingClientRect());
   switch (event.key) {
     case "ArrowUp":
       player.moveUp();
