@@ -4,9 +4,11 @@ class Ghost {
     this.y = 300;
     this.height = 30;
     this.width = 30;
-    this.characterStartup();
 
+    // character setting
     this.speed = 8;
+
+    this.characterStartup();
   }
 
   characterStartup() {
@@ -56,6 +58,7 @@ class Ghost {
 //////////////////////////////
 // Object Class
 //////////////////////////////
+
 class InteractiveObject {
   constructor(height, width, posY, posX, name) {
     this.width = width;
@@ -66,8 +69,11 @@ class InteractiveObject {
     // option for custome class
     this.customClass = name;
 
-    // interaction checker
-    this.hasInteracted = false;
+    // collision checker
+    this.hasCollision = false;
+
+    // manipulation checker
+    this.wasManipulated = false;
 
     // Object creator
     this.addObject();
@@ -75,6 +81,8 @@ class InteractiveObject {
     // this.infoBoard.innerHTML = ""
   }
 
+  /////////////////////////////////////////
+  // create the Object
   addObject() {
     // create new Element + add default class
     this.object = document.createElement("div");
@@ -102,33 +110,7 @@ class InteractiveObject {
     objectCollection.push(this);
   }
 
-  // route to indiviual object interaction
-  interactWithObject(objectName) {
-    this.infoBoardMessage = document.getElementById("message");
-    this.userActionInfo = document.querySelector(".useraction-info");
-    this.userActionInfo.style.display = "flex";
-
-    switch (objectName) {
-      case "tv":
-        console.log("TV");
-        this.infoBoardMessage.innerText = "Interfere the TV";
-
-        break;
-      case "lamp-top-left":
-        console.log("Lamp top right");
-        this.infoBoardMessage.innerText = "Turn off the Standing lamp";
-        break;
-      case "lamp-right":
-        console.log("Lamp right");
-        this.infoBoardMessage.innerText = "Turn off the light";
-        break;
-      case "pen":
-        console.log("PEN");
-        this.infoBoardMessage.innerText = "Throw down the pen";
-        break;
-    }
-  }
-
+  /////////////////////
   // default Infoboard
   resetInfoboard() {
     // remove Interaction message
@@ -137,24 +119,112 @@ class InteractiveObject {
 
     // remove Spacebar message
     this.userActionInfo = document.querySelector(".useraction-info");
-    this.userActionInfo.style.display = "none";
+    this.userActionInfo.innerText = "";
   }
 
+  /////////////////////////////////////////
+  // route to indiviual object interaction
+  interactWithObject(objectName) {
+    this.infoBoardMessage = document.getElementById("message");
+    this.userActionInfo = document.querySelector(".useraction-info");
+    // this.userActionInfo.style.display = "flex";
+
+    if (!this.wasManipulated) {
+      switch (objectName) {
+        case "tv":
+          console.log("TV");
+          this.infoBoardMessage.innerText = "Interfere with the television";
+          this.userActionInfo.innerText = "» Press Space «";
+
+          break;
+        case "lamp-top-left":
+          console.log("Lamp top right");
+          this.infoBoardMessage.innerText = "Turn off the Standing lamp";
+          this.userActionInfo.innerText = "» Press Space «";
+          break;
+        case "lamp-right":
+          console.log("Lamp right");
+          this.infoBoardMessage.innerText = "Turn off the light";
+          this.userActionInfo.innerText = "» Press Space «";
+          break;
+        case "pen":
+          console.log("PEN");
+          this.infoBoardMessage.innerText = "Throw down the pen";
+          this.userActionInfo.innerText = "» Press Space «";
+          break;
+      }
+    }
+  }
+
+  /////////////////////////////////////////
+  // Scare Scare Scare Scare Scare
+
   triggerScare(objectName) {
-    // TV
-    switch (objectName.customClass) {
-      case "tv":
-        console.log("TV has a bug now");
-        break;
-      case "pen":
-        console.log("Pen is on the floor");
-        break;
-      case "lamp-top-left":
-        console.log("Standing lamp is turn off");
-        break;
-      case "lamp-right":
-        console.log("The light is off!");
-        break;
+    // console.log(this.wasManipulated);
+    // console.log("passed Man:", manipulationStatus);
+
+    if (!this.wasManipulated) {
+      switch (objectName.customClass) {
+        // TV
+        case "tv":
+          console.log("TV has a bug now");
+          this.infoBoardMessage.innerText = "The TV has a bug now";
+          this.wasManipulated = true;
+
+          // Add action to queue of the NPC Class
+          npc.actionQueue.push(objectName.customClass);
+
+          // call NPC to take action
+          // npc.npcAction(objectName.customClass);
+
+          break;
+
+        // PEN
+        case "pen":
+          console.log("Pen is on the floor");
+          this.infoBoardMessage.innerText = "The Pen is on the floor!";
+          this.wasManipulated = true;
+
+          // Add action to queue of the NPC Class
+          npc.actionQueue.push(objectName.customClass);
+
+          // call NPC to take action
+          // npc.npcAction(objectName.customClass);
+          break;
+
+        // Lamp top left
+        case "lamp-top-left":
+          console.log("Standing lamp is turn off");
+          this.infoBoardMessage.innerText = "The standing lamp is turn off";
+          this.wasManipulated = true;
+
+          // Add action to queue of the NPC Class
+          npc.actionQueue.push(objectName.customClass);
+
+          // call NPC to take action
+          // npc.npcAction(objectName.customClass);
+          break;
+
+        // Lamp right
+        case "lamp-right":
+          console.log("The light is off!");
+          this.infoBoardMessage.innerText = "The light is off!";
+          this.wasManipulated = true;
+
+          // Add action to queue of the NPC Class
+          npc.actionQueue.push(objectName.customClass);
+
+          // call NPC to take action
+          // npc.npcAction(objectName.customClass);
+          break;
+      }
+
+      // The NPC need to act now, handing over the object that was triggered
+      npc.npcInstruct(objectName);
+
+      // remove Spacebar message
+      this.userActionInfo = document.querySelector(".useraction-info");
+      this.userActionInfo.innerText = "";
     }
   }
 }
@@ -164,16 +234,104 @@ class InteractiveObject {
 //////////////////////////////
 
 class NPC {
-  constructor() {}
+  constructor() {
+    this.width = 40;
+    this.height = 40;
+    this.y = 120;
+    this.x = 270;
+    
+    this.speed = 0;
+
+    // Action Queue
+    this.actionQueue = [];
+
+    this.createNPC();
+  }
+
+  createNPC() {
+    // create new NPC + add id
+    this.npc = document.createElement("div");
+    this.npc.setAttribute("id", "npc");
+
+    // size
+    this.npc.style.width = this.width + "px";
+    this.npc.style.height = this.height + "px";
+
+    // position top/left
+    this.npc.style.position = "absolute";
+
+    this.npc.style.top = this.y - this.height / 2 + "px";
+    this.npc.style.left = this.x - this.width / 2 + "px";
+
+    // place npc
+    this.board = document.getElementById("board");
+    this.board.appendChild(this.npc);
+  }
+
+  npcInstruct(objectName) {
+    // NPC takes action and checks what is in the Action Queue. If there is something then move
+    // to the first Element in the this.actionQueue Array:
+    // 1. turn the manipulation back to false
+    // 2. return this value back to the global scope
+
+    console.log("IN Queue:", this.actionQueue);
+    // console.log("IN Object:", objectName);
+
+    console.log("IN Manipulated:", objectName.wasManipulated);
+
+    // setTimeout(() => {
+      
+    // }, 13000);
+
+    if (this.actionQueue.length > 0) {
+      // as long something is in the queue, move to the next item in queue
+      let objectInQueue = this.actionQueue[0]; // Get the first action
+      // console.log("Action", objectInQueue)
+
+      
+      
+      // console.log("Object Position:", objectCollection.lamp1.getBoundingClientRect())
+      this.objectTarget = document.getElementById(objectInQueue)
+      console.log("Target:", this.objectTarget);
+      console.log("Target Position:", this.objectTarget.getBoundingClientRect());
+
+
+      this.npcMoveTo(objectInQueue)
+      // console.log("OUT Queue:", this.actionQueue);
+      // console.log("OUT Object:", objectName);
+      // console.log("OUT Manipulated:", objectName.wasManipulated);
+      // return objectName.wasManipulated;
+    } else {
+
+      // if there is no more objects that need to be changed back, the NPC should walk back to the couch
+    }
+  }
+
+  npcMoveTo(objectInQueue) {
+    console.log("NPC walks to:", objectInQueue)
+    
+    // if NPC touches Object trigger npcChangeManipilation()
+    
+  }
+
+  npcChangeManipilation() {
+    // objectName.wasManipulated = false;
+
+      // Remove action from queue
+      // this.actionQueue.shift();
+  }
+
 }
 
 //////////////////////////////
 // Game init
 //////////////////////////////
 
+//////////////////////////////
 // New player
 const player = new Ghost();
 
+//////////////////////////////
 // Array with all new objects
 const objectCollection = [];
 
@@ -183,7 +341,10 @@ const lamp2 = new InteractiveObject(60, 60, 270, 530, "lamp-right");
 const tv = new InteractiveObject(140, 260, 480, 300, "tv");
 const pen = new InteractiveObject(100, 65, 335, 70, "pen");
 
-// const npc = new NPC();
+//////////////////////////////
+// NPC
+
+const npc = new NPC();
 
 //////////////////////////////
 // Gane loop update
@@ -208,11 +369,15 @@ window.addEventListener("keydown", function (event) {
       break;
     case " ":
       const interactiveObject = objectCollection.find(
-        (objElm) => objElm.hasInteracted
+        (objElm) => objElm.hasCollision
       );
       if (interactiveObject) {
+        // console.log("Trigger scare method");
+
         interactiveObject.triggerScare(interactiveObject); // Trigger the method when spacebar is pressed and player is in an interactive area
       }
+
+      objectCollection.forEach((objElm) => {});
   }
 
   //////////////////////////////
@@ -224,8 +389,6 @@ window.addEventListener("keydown", function (event) {
 
   // Iterate over objectCollection
   objectCollection.forEach((objElm) => {
-    // console.log(objElm.customClass, "Interacted:",objElm.hasInteracted);
-
     // check collision
     if (
       player.x - player.width / 2 < objElm.x + objElm.width / 2 &&
@@ -233,13 +396,13 @@ window.addEventListener("keydown", function (event) {
       player.y - player.height / 2 < objElm.y + objElm.height / 2 &&
       player.y + player.height / 2 > objElm.y - objElm.height / 2
     ) {
-      if (!objElm.hasInteracted) {
+      if (!objElm.hasCollision) {
         objElm.interactWithObject(objElm.customClass);
-        objElm.hasInteracted = true; // Interaction occurs only once per overlap
+        objElm.hasCollision = true; // Interaction occurs only once per overlap
       }
       isMessageVisible = true; // Message is visible because there's an overlap
     } else {
-      objElm.hasInteracted = false; // Leaving the object resets interaction state
+      objElm.hasCollision = false; // Leaving the object resets interaction state
     }
   });
 
@@ -249,3 +412,8 @@ window.addEventListener("keydown", function (event) {
     new InteractiveObject().resetInfoboard(); // Clear the message if not within an interactive area
   }
 });
+
+//////////////////////////////
+// NPC Action
+
+// setInterval(()=> npc.npcAction() , 1000);

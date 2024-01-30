@@ -182,6 +182,12 @@ html {
     background-color: rgba(255, 255, 255, 0.5);
 }
 
+#npc {
+    background-color: rgba(181, 36, 36, 0.701);
+}
+
+
+
 .interactiveObj {
     box-sizing:content-box;
     border: 1px solid #18b01d;
@@ -202,7 +208,7 @@ html {
 
 .useraction-info {
   font-size: 1.2em;
-  display: none;
+  /* display: none; */
 }
 
 #message {
