@@ -239,7 +239,7 @@ class NPC {
     this.height = 40;
     this.y = 120;
     this.x = 270;
-    
+
     this.speed = 0;
 
     // Action Queue
@@ -280,7 +280,7 @@ class NPC {
     console.log("IN Manipulated:", objectName.wasManipulated);
 
     // setTimeout(() => {
-      
+
     // }, 13000);
 
     if (this.actionQueue.length > 0) {
@@ -288,39 +288,35 @@ class NPC {
       let objectInQueue = this.actionQueue[0]; // Get the first action
       // console.log("Action", objectInQueue)
 
-      
-      
       // console.log("Object Position:", objectCollection.lamp1.getBoundingClientRect())
-      this.objectTarget = document.getElementById(objectInQueue)
+      this.objectTarget = document.getElementById(objectInQueue);
       console.log("Target:", this.objectTarget);
-      console.log("Target Position:", this.objectTarget.getBoundingClientRect());
+      console.log(
+        "Target Position:",
+        this.objectTarget.getBoundingClientRect()
+      );
 
-
-      this.npcMoveTo(objectInQueue)
+      this.npcMoveTo(objectInQueue);
       // console.log("OUT Queue:", this.actionQueue);
       // console.log("OUT Object:", objectName);
       // console.log("OUT Manipulated:", objectName.wasManipulated);
       // return objectName.wasManipulated;
     } else {
-
       // if there is no more objects that need to be changed back, the NPC should walk back to the couch
     }
   }
 
   npcMoveTo(objectInQueue) {
-    console.log("NPC walks to:", objectInQueue)
-    
+    console.log("NPC walks to:", objectInQueue);
+
     // if NPC touches Object trigger npcChangeManipilation()
-    
   }
 
   npcChangeManipilation() {
     // objectName.wasManipulated = false;
-
-      // Remove action from queue
-      // this.actionQueue.shift();
+    // Remove action from queue
+    // this.actionQueue.shift();
   }
-
 }
 
 //////////////////////////////
@@ -353,7 +349,9 @@ const npc = new NPC();
 //////////////////////////////
 
 window.addEventListener("keydown", function (event) {
-  //   console.log("Ghost Position:", this.ghost.getBoundingClientRect());
+  let isPlayerInteracting = false;
+
+  // Player Movement handling
   switch (event.key) {
     case "ArrowUp":
       player.moveUp();
@@ -385,7 +383,7 @@ window.addEventListener("keydown", function (event) {
   //////////////////////////////
 
   // Set isMessageVisible to false at the beginning of each interaction check
-  isMessageVisible = false;
+  setMessageVisible = false;
 
   // Iterate over objectCollection
   objectCollection.forEach((objElm) => {
@@ -400,17 +398,14 @@ window.addEventListener("keydown", function (event) {
         objElm.interactWithObject(objElm.customClass);
         objElm.hasCollision = true; // Interaction occurs only once per overlap
       }
-      isMessageVisible = true; // Message is visible because there's an overlap
+      setMessageVisible = true; // Message is visible because there's an overlap
     } else {
-      objElm.hasCollision = false; // Leaving the object resets interaction state
+      if (objElm.hasCollision) {
+        objElm.resetInfoboard(); // Clear the message if not within an interactive area
+        objElm.hasCollision = false; // Leaving the object resets interaction state
+      }
     }
   });
-
-  // Reset the infoBoardMessage only if no message is currently being displayed by an overlap
-  if (!isMessageVisible) {
-    // Assuming resetInfoboard exists on every object, but this can be a standalone function instead
-    new InteractiveObject().resetInfoboard(); // Clear the message if not within an interactive area
-  }
 });
 
 //////////////////////////////
