@@ -67,7 +67,7 @@ class InteractiveObject {
     this.x = posX;
 
     // option for custome class
-    this.customClass = name;
+    this.name = name;
 
     // collision checker
     this.hasCollision = false;
@@ -89,8 +89,8 @@ class InteractiveObject {
     this.object.setAttribute("class", "interactiveObj");
 
     // add custom class
-    // this.object.classList.add(this.customClass);
-    this.object.setAttribute("id", this.customClass);
+    // this.object.classList.add(this.name);
+    this.object.setAttribute("id", this.name);
 
     // size
     this.object.style.width = this.width + "px";
@@ -124,31 +124,31 @@ class InteractiveObject {
 
   /////////////////////////////////////////
   // route to indiviual object interaction
-  interactWithObject(objectName) {
+  interactWithObject(object) {
     this.infoBoardMessage = document.getElementById("message");
     this.userActionInfo = document.querySelector(".useraction-info");
     // this.userActionInfo.style.display = "flex";
 
     if (!this.wasManipulated) {
-      switch (objectName) {
+      switch (object) {
         case "tv":
-          console.log("TV");
+          // console.log("TV");
           this.infoBoardMessage.innerText = "Interfere with the television";
           this.userActionInfo.innerText = "» Press Space «";
 
           break;
         case "lamp-top-left":
-          console.log("Lamp top right");
+          // console.log("Lamp top right");
           this.infoBoardMessage.innerText = "Turn off the Standing lamp";
           this.userActionInfo.innerText = "» Press Space «";
           break;
         case "lamp-right":
-          console.log("Lamp right");
+          // console.log("Lamp right");
           this.infoBoardMessage.innerText = "Turn off the light";
           this.userActionInfo.innerText = "» Press Space «";
           break;
         case "pen":
-          console.log("PEN");
+          // console.log("PEN");
           this.infoBoardMessage.innerText = "Throw down the pen";
           this.userActionInfo.innerText = "» Press Space «";
           break;
@@ -159,68 +159,64 @@ class InteractiveObject {
   /////////////////////////////////////////
   // Scare Scare Scare Scare Scare
 
-  triggerScare(objectName) {
+  triggerScare(object) {
     // console.log(this.wasManipulated);
     // console.log("passed Man:", manipulationStatus);
 
     if (!this.wasManipulated) {
-      switch (objectName.customClass) {
+      switch (object.name) {
         // TV
         case "tv":
-          console.log("TV has a bug now");
           this.infoBoardMessage.innerText = "The TV has a bug now";
           this.wasManipulated = true;
 
           // Add action to queue of the NPC Class
-          npc.actionQueue.push(objectName.customClass);
+          npc.actionQueue.push(object.name);
 
           // call NPC to take action
-          // npc.npcAction(objectName.customClass);
+          // npc.npcAction(object.name);
 
           break;
 
         // PEN
         case "pen":
-          console.log("Pen is on the floor");
           this.infoBoardMessage.innerText = "The Pen is on the floor!";
           this.wasManipulated = true;
 
           // Add action to queue of the NPC Class
-          npc.actionQueue.push(objectName.customClass);
+          npc.actionQueue.push(object.name);
 
           // call NPC to take action
-          // npc.npcAction(objectName.customClass);
+          // npc.npcAction(object.name);
           break;
 
         // Lamp top left
         case "lamp-top-left":
-          console.log("Standing lamp is turn off");
           this.infoBoardMessage.innerText = "The standing lamp is turn off";
           this.wasManipulated = true;
 
           // Add action to queue of the NPC Class
-          npc.actionQueue.push(objectName.customClass);
+          npc.actionQueue.push(object.name);
 
           // call NPC to take action
-          // npc.npcAction(objectName.customClass);
+          // npc.npcAction(object.name);
           break;
 
         // Lamp right
         case "lamp-right":
-          console.log("The light is off!");
           this.infoBoardMessage.innerText = "The light is off!";
           this.wasManipulated = true;
 
           // Add action to queue of the NPC Class
-          npc.actionQueue.push(objectName.customClass);
+          npc.actionQueue.push(object.name);
 
           // call NPC to take action
-          // npc.npcAction(objectName.customClass);
+          // npc.npcAction(object.name);
           break;
       }
 
       // The NPC need to act now, handing over the object that was triggered
-      npc.npcInstruct(objectName);
+      npc.npcInstruct(object);
 
       // remove Spacebar message
       this.userActionInfo = document.querySelector(".useraction-info");
@@ -240,7 +236,14 @@ class NPC {
     this.y = 120;
     this.x = 270;
 
-    this.speed = 0;
+    // Position once triggered
+    this.currentX = this.x;
+    this.currentY = this.y;
+
+    this.targetX = null;
+    this.targetY = null;
+
+    this.speed = 1;
 
     // Action Queue
     this.actionQueue = [];
@@ -274,10 +277,10 @@ class NPC {
     // 1. turn the manipulation back to false
     // 2. return this value back to the global scope
 
-    console.log("IN Queue:", this.actionQueue);
+    console.log("Object Queue:", this.actionQueue);
     // console.log("IN Object:", objectName);
 
-    console.log("IN Manipulated:", objectName.wasManipulated);
+    // console.log("IN Manipulated:", objectName.wasManipulated);
 
     // setTimeout(() => {
 
@@ -290,13 +293,14 @@ class NPC {
 
       // console.log("Object Position:", objectCollection.lamp1.getBoundingClientRect())
       this.objectTarget = document.getElementById(objectInQueue);
-      console.log("Target:", this.objectTarget);
+      // console.log("Target:", this.objectTarget);
       console.log(
         "Target Position:",
         this.objectTarget.getBoundingClientRect()
+        // this.objectTarget.getCurrentPosition()
       );
 
-      this.npcMoveTo(objectInQueue);
+      this.npcMoveTo(objectName);
       // console.log("OUT Queue:", this.actionQueue);
       // console.log("OUT Object:", objectName);
       // console.log("OUT Manipulated:", objectName.wasManipulated);
@@ -306,10 +310,55 @@ class NPC {
     }
   }
 
-  npcMoveTo(objectInQueue) {
-    console.log("NPC walks to:", objectInQueue);
+  npcMoveTo(object) {
+    console.log("NPC walks to:", object.name);
+    console.log("NPC Position", this.currentX, this.currentY);
+    // this.targetX = object.x + this.width / 2;
+    // this.targetY = object.y + this.height / 2;
+    this.targetX = object.x - this.width / 2;
+    this.targetY = object.y - this.height / 2;
+    // this.targetX = object.object.getBoundingClientRect().x +this.width / 2;
+    // this.targetY = object.object.getBoundingClientRect().y + this.height / 2;
+
+   
 
     // if NPC touches Object trigger npcChangeManipilation()
+    // // Move along X axis
+    if (this.targetX > this.currentX) {
+      this.npc.style.left = this.targetX + "px";
+      this.currentX = this.targetX
+    } else if (this.targetX < this.currentX) {
+      this.npc.style.left = this.targetX + "px";
+      this.currentX = this.targetX
+    }
+    
+    // Move along Y axis
+    if (this.targetY > this.currentY) {
+      this.npc.style.top = this.targetY + "px";
+      this.currentY= this.targetY
+    } else if (this.targetY < this.currentY) {
+      this.npc.style.top = this.targetY + "px";
+      this.currentY= this.targetY
+    }
+    
+    console.log("TargetX", this.targetX);
+    console.log("TargetY", this.targetY);
+
+    console.log("NPC Position", this.currentX, this.currentY);
+    // Check if NPC reached the target
+    if (this.currentX === this.targetX && this.currentY === this.targetY) {
+      console.log(`NPC reached target at (${this.targetX}, ${this.targetY}).`);
+
+      // Perform action here if necessary
+      object.wasManipulated = false
+
+      // Move to the next target if any
+      if (this.actionQueue.length > 0) {
+        let nextTarget = this.actionQueue.shift(); // Assuming each action in queue has 'x' and 'y' properties
+        this.targetX = nextTarget.x;
+        this.targetY = nextTarget.y;
+      }
+    }
   }
 
   npcChangeManipilation() {
@@ -370,8 +419,6 @@ window.addEventListener("keydown", function (event) {
         (objElm) => objElm.hasCollision
       );
       if (interactiveObject) {
-        // console.log("Trigger scare method");
-
         interactiveObject.triggerScare(interactiveObject); // Trigger the method when spacebar is pressed and player is in an interactive area
       }
 
@@ -395,7 +442,7 @@ window.addEventListener("keydown", function (event) {
       player.y + player.height / 2 > objElm.y - objElm.height / 2
     ) {
       if (!objElm.hasCollision) {
-        objElm.interactWithObject(objElm.customClass);
+        objElm.interactWithObject(objElm.name);
         objElm.hasCollision = true; // Interaction occurs only once per overlap
       }
       setMessageVisible = true; // Message is visible because there's an overlap
@@ -410,5 +457,3 @@ window.addEventListener("keydown", function (event) {
 
 //////////////////////////////
 // NPC Action
-
-// setInterval(()=> npc.npcAction() , 1000);
