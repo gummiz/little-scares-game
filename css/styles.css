@@ -186,7 +186,13 @@ html {
     background-color: rgb(128, 0, 255);
 }
 
-
+#intermediatePoint {
+  position: absolute;
+  top: 300px;
+  left: 300px; 
+  height: 10px;
+  width: 10px;
+}
 
 .interactiveObj {
     box-sizing:content-box;

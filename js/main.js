@@ -170,7 +170,8 @@ class InteractiveObject {
           this.infoBoardMessage.innerText = "The TV has a bug now";
           this.wasManipulated = true;
 
-          // Add action to queue of the NPC Class
+          // Add waypoint and next object to queue of the NPC Class
+          npc.actionQueue.push("waypoint");
           npc.actionQueue.push(object.name);
 
           // call NPC to take action
@@ -183,7 +184,8 @@ class InteractiveObject {
           this.infoBoardMessage.innerText = "The Pen is on the floor!";
           this.wasManipulated = true;
 
-          // Add action to queue of the NPC Class
+          // Add waypoint and next object to queue of the NPC Class
+          npc.actionQueue.push("waypoint");
           npc.actionQueue.push(object.name);
 
           // call NPC to take action
@@ -195,7 +197,8 @@ class InteractiveObject {
           this.infoBoardMessage.innerText = "The standing lamp is turn off";
           this.wasManipulated = true;
 
-          // Add action to queue of the NPC Class
+          // Add waypoint and next object to queue of the NPC Class
+          npc.actionQueue.push("waypoint");
           npc.actionQueue.push(object.name);
 
           // call NPC to take action
@@ -207,7 +210,8 @@ class InteractiveObject {
           this.infoBoardMessage.innerText = "The light is off!";
           this.wasManipulated = true;
 
-          // Add action to queue of the NPC Class
+          // Add waypoint and next object to queue of the NPC Class
+          npc.actionQueue.push("waypoint");
           npc.actionQueue.push(object.name);
 
           // call NPC to take action
@@ -216,9 +220,12 @@ class InteractiveObject {
       }
 
       // The NPC need to act now, handing over the object that was triggered
+      console.log("new Object Array", npc.actionQueue);
 
       if (!npc.isMoving) {
-        npc.setTarget(object);
+        console.log("objects on trigger", npc.actionQueue);
+        let nextTarget = npc.actionQueue[0];
+        npc.setTarget(nextTarget === "waypoint" ? waypoint : object);
       }
 
       // remove Spacebar message
@@ -247,11 +254,15 @@ class NPC {
     this.targetY = null;
 
     // moving speed
-    this.speed = 2;
+    this.speed = 10;
 
     // get the current Target object later in the code
     this.currentTarget = null;
     this.setTarget = this.setTarget.bind(this); // make it available beyond itself
+
+    // predefined intermediat Point
+    this.waypointX = waypoint.x;
+    this.waypointY = waypoint.y;
 
     // Action Queue
     this.actionQueue = [];
@@ -282,22 +293,30 @@ class NPC {
   setTarget(object) {
     console.log("Queue:", this.actionQueue);
 
+    if (object.name === "waypoint") {
+      this.targetX = this.waypointX;
+      this.targetY = this.waypointY;
+    } else if (npc.actionQueue.length === 0) {
+      this.targetX = this.x - this.height / 2;
+      this.targetY = this.y - this.width / 2;
+    } else {
+      this.targetX = object.x - this.width / 2;
+      this.targetY = object.y - this.height / 2;
+    }
+
     this.currentTarget = object;
     console.log("NPC walks to:", this.currentTarget.name);
-
-    this.targetX = object.x - this.width / 2;
-    this.targetY = object.y - this.height / 2;
 
     this.isMoving = true; // Start moving when a new target is set
     this.isNavigating = true; // Start navigating to the new target
     this.currentTarget = object; // Store the current target object
     this.moveNPC(); // Start moving
+    npc.actionQueue.shift();
   }
 
   moveNPC() {
     console.log("Target:", this.targetX, this.targetY);
     console.log("NPC:", this.currentX, this.currentY);
-    console.log(this.isMoving);
     // Only move if isMoving is true
     if (this.isMoving) {
       // Move along X axis
@@ -327,7 +346,7 @@ class NPC {
         Math.abs(this.currentY - this.targetY) <= inReach
       ) {
         console.log(
-          `NPC reached target at (${this.targetX}, ${this.targetY}).`
+          `NPC reached target at (${this.targetX}, ${this.targetY}). Array: ${npc.actionQueue}.`
         );
 
         // change state of the interacted object back to default
@@ -335,20 +354,18 @@ class NPC {
         this.isMoving = false; // Stop moving once target is reached
         this.isNavigating = false; // Stop navigating once target is reached
 
-        this.actionQueue.shift(); // remove from queue
-        console.log("Queue:", this.actionQueue);
-
-        // Perform action here if necessary
-
         // Move to the next target if any
         if (this.actionQueue.length > 0) {
-          let nextTarget = this.actionQueue.shift(); // Get the next targets name and pass turn it into an object in next line
+          let nextTarget = this.actionQueue[0]; // Get the next targets name and pass turn it into an object in next line
           let nextObject = objectCollection.find((obj) => {
             return obj.name === nextTarget; // Return the condition
           }); // Find the next object based on its name
 
           console.log("Next Target:", nextTarget);
           this.setTarget(nextObject); // Set the next target
+        } else {
+          console.log("No more targets");
+          this.npcMoveToSofa()
         }
       } else {
         // If NPC hasn't reached the target, call moveNPC again after a delay
@@ -356,10 +373,55 @@ class NPC {
       }
     }
   }
-  npcChangeManipilation() {
-    // objectName.wasManipulated = false;
-    // Remove action from queue
-    // this.actionQueue.shift();
+  npcMoveToSofa() {
+    // move back to sofa if nothing is left to go to
+    
+    this.targetX = sofa.x - this.width / 2;
+    this.targetY = sofa.y - this.height / 2;
+    this.isMoving = true
+
+    if (this.isMoving) {
+      // Move along X axis
+      if (this.targetX > this.currentX) {
+        this.currentX += this.speed;
+      } else if (this.targetX < this.currentX) {
+        this.currentX -= this.speed;
+      }
+
+      // Move along Y axis
+      if (this.targetY > this.currentY) {
+        this.currentY += this.speed;
+      } else if (this.targetY < this.currentY) {
+        this.currentY -= this.speed;
+      }
+
+      this.npc.style.left = this.currentX + "px";
+      this.npc.style.top = this.currentY + "px";
+
+      // Check if NPC reached the target
+      // Define a small range within which the NPC is considered to have reached its target
+      const inReach = Math.abs(this.speed);
+
+      // Check if NPC reached the target
+      if (
+        Math.abs(this.currentX - this.targetX) <= inReach &&
+        Math.abs(this.currentY - this.targetY) <= inReach
+      ) {
+        console.log(
+          `NPC reached target at (${this.targetX}, ${this.targetY}). Array: ${npc.actionQueue}.`
+        );
+
+        // change state of the interacted object back to default
+        this.currentTarget.wasManipulated = false;
+        this.isMoving = false; // Stop moving once target is reached
+        this.isNavigating = false; // Stop navigating once target is reached
+
+       
+      } else {
+        // If NPC hasn't reached the target, call moveNPC again after a delay
+        setTimeout(this.moveNPC.bind(this), 100); // Adjust delay as needed
+      }
+    }
   }
 }
 
@@ -380,6 +442,9 @@ const lamp1 = new InteractiveObject(80, 80, 100, 80, "lamp-top-left");
 const lamp2 = new InteractiveObject(60, 60, 270, 530, "lamp-right");
 const tv = new InteractiveObject(140, 260, 480, 300, "tv");
 const pen = new InteractiveObject(100, 65, 335, 70, "pen");
+
+const waypoint = new InteractiveObject(10, 10, 240, 290, "waypoint");
+const sofa = new InteractiveObject(40, 40, 120, 270, "sofa");
 
 //////////////////////////////
 // NPC

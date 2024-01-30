@@ -1,5 +1,3 @@
-# Milestones
-
 1. Basics
     - [x]  Board with BG
     - [x]  Bounding box ([getBoundingClientRect()](https://www.youtube.com/watch?v=MKpZadkuT-0), [Browser support](https://caniuse.com/?search=getBoundingClientRect))
@@ -13,15 +11,15 @@
 3. Environment (Interactive Objects)
     - [x]  create Object and add to board
     - [x]  interaction with elements on the board
-    - [ ]  interaction triggers something
-    - [ ]  if ghost triggers scare, person turns to POI
-    - [ ]  person walks to POI
+    - [x]  interaction triggers something
+    - [x]  if ghost triggers scare, person turns to POI
+    - [x]  person walks to POI
     - [ ]  Ghost visible / invisble when interacting
-    - [ ]  Triggering of NPC
+    - [x]  Triggering of NPC
 4. NPC
-    - [ ]  add NPC
-    - [ ]  place NPC
-    - [ ]  Eventlistener
+    - [x]  add NPC
+    - [x]  place NPC
+    - [x]  Eventlistener
     - [ ]  rotation and collision [[1]](https://gamedev.stackexchange.com/questions/173555/collision-detection-between-two-arrays-with-nested-loops-why-do-i-get-a-crash) [[2]](https://codeincomplete.com/articles/javascript-gauntlet-collision-detection/)
 5. Collision system & 
     - [ ]  if ghost is in POI and Visible = loose game
