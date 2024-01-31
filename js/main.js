@@ -375,7 +375,7 @@ class NPC {
   }
   npcMoveToSofa() {
     // move back to sofa if nothing is left to go to
-    
+
     this.targetX = sofa.x - this.width / 2;
     this.targetY = sofa.y - this.height / 2;
     this.isMoving = true
@@ -438,10 +438,10 @@ const player = new Ghost();
 const objectCollection = [];
 
 // objects (height, width, y, x, css className)
-const lamp1 = new InteractiveObject(80, 80, 100, 80, "lamp-top-left");
-const lamp2 = new InteractiveObject(60, 60, 270, 530, "lamp-right");
-const tv = new InteractiveObject(140, 260, 480, 300, "tv");
-const pen = new InteractiveObject(100, 65, 335, 70, "pen");
+const lamp1 = new InteractiveObject(50, 50, 130, 100, "lamp-top-left");
+const lamp2 = new InteractiveObject(60, 40, 280, 520, "lamp-right");
+const tv = new InteractiveObject(50, 260, 450, 300, "tv");
+const pen = new InteractiveObject(100, 45, 335, 90, "pen");
 
 const waypoint = new InteractiveObject(10, 10, 240, 290, "waypoint");
 const sofa = new InteractiveObject(40, 40, 120, 270, "sofa");
