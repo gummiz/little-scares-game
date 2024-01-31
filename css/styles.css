@@ -270,11 +270,47 @@ li{
 
 
 
-#loosing {
+#losing {
   height: 100%;
   width: 100%;
   background-color: #251319;
 }
+
+#losing div {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+#losing p {
+  width: 350px;
+  text-align: center;
+  font-size: 3em;
+  padding-bottom: 40px;
+}
+
+#restart-btn {
+  width: 230px;
+  background-color: #c4331f;
+  color: #fff;
+  font-size: 1.5em;
+  font-weight: 800;
+  font-style: normal;
+  text-decoration: none;
+  padding: 10px 10px;
+  border: 0px solid #000;
+  border-radius: 10px;
+  display: inline-block;
+}
+
+#restart-btn:hover{
+  background-color: rgb(219, 77, 67);
+  /* transform: scale(1.03); */
+ }
+ #restart-btn:active{
+  transform: scale(0.95);
+ }
 
 .hidden {
   display: none;
@@ -283,3 +319,5 @@ li{
 .show {
   display: block;
 }
+
+

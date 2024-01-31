@@ -178,7 +178,7 @@ class InteractiveObject {
           npc.actionQueue.push("waypoint");
           npc.actionQueue.push(object.name);
 
-          ux.scareCounterPlus();
+          game.scareCounterPlus();
           break;
 
         // PEN
@@ -190,7 +190,7 @@ class InteractiveObject {
           npc.actionQueue.push("waypoint");
           npc.actionQueue.push(object.name);
 
-          ux.scareCounterPlus();
+          game.scareCounterPlus();
           break;
 
         // Lamp top left
@@ -202,7 +202,7 @@ class InteractiveObject {
           npc.actionQueue.push("waypoint");
           npc.actionQueue.push(object.name);
 
-          ux.scareCounterPlus();
+          game.scareCounterPlus();
           break;
 
         // Lamp right
@@ -214,7 +214,7 @@ class InteractiveObject {
           npc.actionQueue.push("waypoint");
           npc.actionQueue.push(object.name);
 
-          ux.scareCounterPlus();
+          game.scareCounterPlus();
           break;
       }
 
@@ -360,7 +360,7 @@ class NPC {
           this.currentTarget.name !== "waypoint" &&
           this.currentTarget.name !== "sofa"
         ) {
-          ux.scareCounterMinus();
+          game.scareCounterMinus();
         }
 
         // Move to the next target if any
@@ -433,10 +433,10 @@ class NPC {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// UI / UX
+// Game setup
 //////////////////////////////
 
-class UX {
+class Game {
   constructor() {
     this.scareAmount = 0;
 
@@ -450,6 +450,7 @@ class UX {
 
     this.timer = document.getElementById("timer");
     this.timer.innerText = `${this.minutes}:${this.seconds}`;
+
   }
 
   scareCounterPlus() {
@@ -504,45 +505,58 @@ class UX {
 
   startCountdown() {
     console.log("Countdown started");
-     let timer = this.timeTotal;
-     this.timer.innerText = `${this.minutes}:${this.seconds}`;
-     
-     this.intervalTimer = setInterval(() => {
+    let timer = this.timeTotal;
+    this.timer.innerText = `${this.minutes}:${this.seconds}`;
+
+    this.intervalTimer = setInterval(() => {
       timer--;
-      
+
       let minutes = Math.floor(timer / 60);
       let seconds = timer % 60;
       console.log(minutes, seconds);
-    
+
       this.timer.innerText = `${formatTime(minutes)}:${formatTime(seconds)}`;
-    
+
       if (timer <= 0) {
-        console.log("You loose!")
+        console.log("You loose!");
         clearInterval(this.intervalTimer);
 
         //show loosing screen
-        let loosingScreen = document.getElementById("loosing")
-        loosingScreen.setAttribute("class", "show")
+        let losingScreen = document.getElementById("losing");
+        losingScreen.setAttribute("class", "show");
+        
+        // hidde npc and ghost
+        let ghost = document.getElementById("ghost")
+        ghost.setAttribute("class", "hidden");
+        let npc = document.getElementById("npc")
+        npc.setAttribute("class", "hidden");
+
+        document.getElementById("timer").remove();
+        document.getElementById("scare-counter").remove();
+        document.getElementById("header").style.justifyContent = "center";
+
       }
-    }, 1000);
+    }, 100);
 
     function formatTime(time) {
-      return time.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping: false});
+      return time.toLocaleString("en-US", {
+        minimumIntegerDigits: 2,
+        useGrouping: false,
+      });
     }
-    
   }
 
-  restart(){
+  restart() {
     console.log("Restart");
     //hidde loosing screen
-    let loosingScreen = document.getElementById("loosing")
-    loosingScreen.setAttribute("class", "hidden")
+    let loosingScreen = document.getElementById("loosing");
+    loosingScreen.setAttribute("class", "hidden");
 
     // show player and NPC
-    let player = document.getElementById("ghost")
-    let npc = document.getElementById("npc")
+    let player = document.getElementById("ghost");
+    let npc = document.getElementById("npc");
 
-    this.startCountdown()
+    this.startCountdown();
   }
 }
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -569,9 +583,8 @@ const sofa = new InteractiveObject(40, 40, 120, 270, "sofa");
 //////////////////////////////
 // UX
 
-const ux = new UX();
-ux.startCountdown();
-
+const game = new Game();
+game.startCountdown();
 
 //////////////////////////////
 // NPC
@@ -642,9 +655,10 @@ window.addEventListener("keydown", function (event) {
   });
 });
 
-
 ////////////////////////
 // Game Restart
 
-let restartBtn = document.getElementById("restart-btn")
-restartBtn.onclick = () => {ux.restart()}
+let restartBtn = document.getElementById("restart-btn");
+restartBtn.onclick = () => {
+ window.location.reload();
+};
