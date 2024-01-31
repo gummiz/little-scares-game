@@ -187,7 +187,7 @@ html {
 }
 
 #scare-counter {
-  width: 200px;
+  width: 210px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -199,11 +199,12 @@ html {
 }
 
 li{
-  display: inline-block;;
+  display: inline-block;
   height: 30px;
   width: 18px;
   background-color: #56343F;
-  list-style-type:none
+  list-style-type:none;
+  margin-right: 3px;
 }
 
 
@@ -219,6 +220,51 @@ li{
   overflow: hidden;
 }
 
+
+#start {
+  height: 100%;
+  width: 100%;
+  background-color: #251319;
+}
+
+#start h1 {
+  font-size: 4em;
+  color: #C4331F;
+  text-transform: uppercase;
+  text-align: center;
+  padding-top: 100px;
+
+}
+
+#start p {
+  width: 450px;
+  font-size: 1.4em;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  line-height: 1.4em;
+  padding-bottom: 40px;
+}
+
+#start-btn {
+  width: 230px;
+  background-color: #c4331f;
+  color: #fff;
+  font-size: 1.5em;
+  font-weight: 800;
+  font-style: normal;
+  text-decoration: none;
+  padding: 10px 10px;
+  border: 0px solid #000;
+  border-radius: 10px;
+  display: inline-block;
+}
+
+#start-btn:hover{
+  background-color: rgb(219, 77, 67);
+  /* transform: scale(1.03); */
+ }
+ #start-btn:active{
+  transform: scale(0.95);
+ }
 
 
 

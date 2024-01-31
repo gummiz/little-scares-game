@@ -18,6 +18,7 @@ class Ghost {
   characterStartup() {
     this.ghost = document.createElement("div");
     this.ghost.setAttribute("id", "ghost");
+    this.ghost.setAttribute("class", "hidden");
 
     // Ghost Size
     this.ghost.style.width = this.width + "px";
@@ -273,6 +274,7 @@ class NPC {
     // create new NPC + add id
     this.npc = document.createElement("div");
     this.npc.setAttribute("id", "npc");
+    this.npc.setAttribute("class", "hidden");
 
     // size
     this.npc.style.width = this.width + "px";
@@ -439,7 +441,48 @@ class NPC {
 class Game {
   constructor() {
     this.scareAmount = 0;
+  }
 
+  startScreen() {}
+
+  play() {
+    ////////////////////////////////////////////////////////////
+    // create logo
+    let logo = document.createElement("div");
+    logo.id = "logo";
+    logo.textContent = "Little Scares";
+    document.getElementById("header").appendChild(logo);
+
+    ////////////////////////////////////////////////////////////
+    // Timer placement
+    let timer = document.createElement("div");
+    timer.setAttribute("id", "timer");
+    document.getElementById("header").appendChild(timer);
+
+
+    ////////////////////////////////////////////////////////////
+    // Create scare counter
+    const scareCounter = document.createElement("div");
+    scareCounter.id = "scare-counter";
+
+    const counter = document.createElement("div");
+    counter.id = "counter";
+    counter.textContent = "Scare Score";
+    scareCounter.appendChild(counter);
+
+    const ul = document.createElement("ul");
+    ul.className = "indicator";
+    ["level1", "level2", "level3", "level4"].forEach((level) => {
+      const li = document.createElement("li");
+      li.className = level;
+      ul.appendChild(li);
+    });
+    scareCounter.appendChild(ul);
+
+    
+    document.getElementById("header").appendChild(scareCounter);
+
+    ////////////////////////////////////////////////////////////
     // set time in sec
     this.timeTotal = 30; // 2min
 
@@ -451,6 +494,16 @@ class Game {
     this.timer = document.getElementById("timer");
     this.timer.innerText = `${this.minutes}:${this.seconds}`;
 
+    ////////////////////////////////////////////////////////////
+    // hidde start screen
+    document.getElementById("start").setAttribute("class", "hidden")
+
+    // show ghost and npc
+    document.getElementById("ghost").setAttribute("class", "show")
+    document.getElementById("npc").setAttribute("class", "show")
+
+
+    this.startCountdown()
   }
 
   scareCounterPlus() {
@@ -524,17 +577,16 @@ class Game {
         //show loosing screen
         let losingScreen = document.getElementById("losing");
         losingScreen.setAttribute("class", "show");
-        
+
         // hidde npc and ghost
-        let ghost = document.getElementById("ghost")
+        let ghost = document.getElementById("ghost");
         ghost.setAttribute("class", "hidden");
-        let npc = document.getElementById("npc")
+        let npc = document.getElementById("npc");
         npc.setAttribute("class", "hidden");
 
         document.getElementById("timer").remove();
         document.getElementById("scare-counter").remove();
         document.getElementById("header").style.justifyContent = "center";
-
       }
     }, 100);
 
@@ -584,7 +636,8 @@ const sofa = new InteractiveObject(40, 40, 120, 270, "sofa");
 // UX
 
 const game = new Game();
-game.startCountdown();
+game.startScreen();
+// game.startCountdown();
 
 //////////////////////////////
 // NPC
@@ -660,5 +713,10 @@ window.addEventListener("keydown", function (event) {
 
 let restartBtn = document.getElementById("restart-btn");
 restartBtn.onclick = () => {
- window.location.reload();
+  window.location.reload();
+};
+
+let startBtn = document.getElementById("start-btn");
+startBtn.onclick = () => {
+  game.play();
 };
