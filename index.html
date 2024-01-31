@@ -13,7 +13,27 @@
     <title>Little Scares</title>
   </head>
   <body>
+    <div id="header">
+      <div id="logo">Little Scares</div>
+      <div id="timer">
+        
+      </div>
+      <div id="scare-counter">
+        <div id="counter">Scare Score</div>
+        <ul class="indicator">
+          <li class="level1"></li>
+          <li class="level2"></li>
+          <li class="level3"></li>
+          <li class="level4"></li>
+        </ul>
+      </div>
+    </div>
+    
     <div id="board">
+      <div id="loosing" class="hidden">
+        <p>You couldn't scare the person!</p>
+        <button id="restart-btn">Try again</button>
+      </div>
       <!-- <div class="interactiveObj" id="intermediatePoint"></div> -->
     </div>
     <div id="infoboard">

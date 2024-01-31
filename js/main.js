@@ -1,3 +1,7 @@
+//////////////////////////////////////////////////////////////////////////////////////////
+// Player Class
+//////////////////////////////////////////////////////////////////////////////////////////
+
 class Ghost {
   constructor() {
     this.x = 300;
@@ -6,7 +10,7 @@ class Ghost {
     this.width = 30;
 
     // character setting
-    this.speed = 8;
+    this.speed = 10;
 
     this.characterStartup();
   }
@@ -55,9 +59,9 @@ class Ghost {
   }
 }
 
-//////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
 // Object Class
-//////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
 
 class InteractiveObject {
   constructor(height, width, posY, posX, name) {
@@ -174,9 +178,7 @@ class InteractiveObject {
           npc.actionQueue.push("waypoint");
           npc.actionQueue.push(object.name);
 
-          // call NPC to take action
-          // npc.npcAction(object.name);
-
+          ux.scareCounterPlus();
           break;
 
         // PEN
@@ -188,8 +190,7 @@ class InteractiveObject {
           npc.actionQueue.push("waypoint");
           npc.actionQueue.push(object.name);
 
-          // call NPC to take action
-          // npc.npcAction(object.name);
+          ux.scareCounterPlus();
           break;
 
         // Lamp top left
@@ -201,8 +202,7 @@ class InteractiveObject {
           npc.actionQueue.push("waypoint");
           npc.actionQueue.push(object.name);
 
-          // call NPC to take action
-          // npc.npcAction(object.name);
+          ux.scareCounterPlus();
           break;
 
         // Lamp right
@@ -214,8 +214,7 @@ class InteractiveObject {
           npc.actionQueue.push("waypoint");
           npc.actionQueue.push(object.name);
 
-          // call NPC to take action
-          // npc.npcAction(object.name);
+          ux.scareCounterPlus();
           break;
       }
 
@@ -235,9 +234,9 @@ class InteractiveObject {
   }
 }
 
-//////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
 // NPC Class
-//////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
 
 class NPC {
   constructor() {
@@ -253,8 +252,8 @@ class NPC {
     this.targetX = null;
     this.targetY = null;
 
-    // moving speed
-    this.speed = 10;
+    // NPC moving speed
+    this.speed = 5;
 
     // get the current Target object later in the code
     this.currentTarget = null;
@@ -315,8 +314,10 @@ class NPC {
   }
 
   moveNPC() {
-    console.log("Target:", this.targetX, this.targetY);
-    console.log("NPC:", this.currentX, this.currentY);
+    // console.log("Target:", this.targetX, this.targetY);
+    // console.log("NPC:", this.currentX, this.currentY);
+    // console.log("Current Target Object", this.currentTarget);
+
     // Only move if isMoving is true
     if (this.isMoving) {
       // Move along X axis
@@ -340,19 +341,27 @@ class NPC {
       // Define a small range within which the NPC is considered to have reached its target
       const inReach = Math.abs(this.speed);
 
+      ///////////////////////////////////////////////
       // Check if NPC reached the target
       if (
         Math.abs(this.currentX - this.targetX) <= inReach &&
         Math.abs(this.currentY - this.targetY) <= inReach
       ) {
         console.log(
-          `NPC reached target at (${this.targetX}, ${this.targetY}). Array: ${npc.actionQueue}.`
+          `NPC reached target ${this.currentTarget.name}. Array: ${npc.actionQueue}`
         );
 
         // change state of the interacted object back to default
         this.currentTarget.wasManipulated = false;
         this.isMoving = false; // Stop moving once target is reached
         this.isNavigating = false; // Stop navigating once target is reached
+
+        if (
+          this.currentTarget.name !== "waypoint" &&
+          this.currentTarget.name !== "sofa"
+        ) {
+          ux.scareCounterMinus();
+        }
 
         // Move to the next target if any
         if (this.actionQueue.length > 0) {
@@ -365,7 +374,7 @@ class NPC {
           this.setTarget(nextObject); // Set the next target
         } else {
           console.log("No more targets");
-          this.npcMoveToSofa()
+          this.npcMoveToSofa();
         }
       } else {
         // If NPC hasn't reached the target, call moveNPC again after a delay
@@ -378,7 +387,7 @@ class NPC {
 
     this.targetX = sofa.x - this.width / 2;
     this.targetY = sofa.y - this.height / 2;
-    this.isMoving = true
+    this.isMoving = true;
 
     if (this.isMoving) {
       // Move along X axis
@@ -408,15 +417,13 @@ class NPC {
         Math.abs(this.currentY - this.targetY) <= inReach
       ) {
         console.log(
-          `NPC reached target at (${this.targetX}, ${this.targetY}). Array: ${npc.actionQueue}.`
+          `NPC reached target ${this.currentTarget.name}. Array: ${npc.actionQueue}`
         );
 
         // change state of the interacted object back to default
         this.currentTarget.wasManipulated = false;
         this.isMoving = false; // Stop moving once target is reached
         this.isNavigating = false; // Stop navigating once target is reached
-
-       
       } else {
         // If NPC hasn't reached the target, call moveNPC again after a delay
         setTimeout(this.moveNPC.bind(this), 100); // Adjust delay as needed
@@ -425,9 +432,122 @@ class NPC {
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////
+// UI / UX
 //////////////////////////////
+
+class UX {
+  constructor() {
+    this.scareAmount = 0;
+
+    // set time in sec
+    this.timeTotal = 30; // 2min
+
+    this.minutes = Math.floor(this.timeTotal / 60)
+      .toString()
+      .padStart(2, "0");
+    this.seconds = (this.timeTotal % 60).toString().padStart(2, "0");
+
+    this.timer = document.getElementById("timer");
+    this.timer.innerText = `${this.minutes}:${this.seconds}`;
+  }
+
+  scareCounterPlus() {
+    console.log("Plus");
+
+    switch (this.scareAmount) {
+      case 0:
+        const level1 = document.querySelector(".level1");
+        level1.style.backgroundColor = "#339d3f";
+        this.scareAmount++;
+        break;
+      case 1:
+        const level2 = document.querySelector(".level2");
+        level2.style.backgroundColor = "#D4D66B";
+        this.scareAmount++;
+        break;
+      case 2:
+        const level3 = document.querySelector(".level3");
+        level3.style.backgroundColor = "#D6926B";
+        this.scareAmount++;
+        break;
+      case 3:
+        const level4 = document.querySelector(".level4");
+        level4.style.backgroundColor = "#B74949";
+        this.scareAmount++;
+        break;
+    }
+    console.log("Score", this.scareAmount);
+  }
+
+  scareCounterMinus() {
+    console.log("Minus");
+    switch (this.scareAmount) {
+      case 1:
+        const level1 = document.querySelector(".level1");
+        level1.style.backgroundColor = "#56343F";
+        this.scareAmount--;
+        break;
+      case 2:
+        const level2 = document.querySelector(".level2");
+        level2.style.backgroundColor = "#56343F";
+        this.scareAmount--;
+        break;
+      case 3:
+        const level3 = document.querySelector(".level3");
+        level3.style.backgroundColor = "#56343F";
+        this.scareAmount--;
+        break;
+    }
+    console.log("Score", this.scareAmount);
+  }
+
+  startCountdown() {
+    console.log("Countdown started");
+     let timer = this.timeTotal;
+     this.timer.innerText = `${this.minutes}:${this.seconds}`;
+     
+     this.intervalTimer = setInterval(() => {
+      timer--;
+      
+      let minutes = Math.floor(timer / 60);
+      let seconds = timer % 60;
+      console.log(minutes, seconds);
+    
+      this.timer.innerText = `${formatTime(minutes)}:${formatTime(seconds)}`;
+    
+      if (timer <= 0) {
+        console.log("You loose!")
+        clearInterval(this.intervalTimer);
+
+        //show loosing screen
+        let loosingScreen = document.getElementById("loosing")
+        loosingScreen.setAttribute("class", "show")
+      }
+    }, 1000);
+
+    function formatTime(time) {
+      return time.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping: false});
+    }
+    
+  }
+
+  restart(){
+    console.log("Restart");
+    //hidde loosing screen
+    let loosingScreen = document.getElementById("loosing")
+    loosingScreen.setAttribute("class", "hidden")
+
+    // show player and NPC
+    let player = document.getElementById("ghost")
+    let npc = document.getElementById("npc")
+
+    this.startCountdown()
+  }
+}
+//////////////////////////////////////////////////////////////////////////////////////////
 // Game init
-//////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////
 // New player
@@ -447,15 +567,24 @@ const waypoint = new InteractiveObject(10, 10, 240, 290, "waypoint");
 const sofa = new InteractiveObject(40, 40, 120, 270, "sofa");
 
 //////////////////////////////
+// UX
+
+const ux = new UX();
+ux.startCountdown();
+
+
+//////////////////////////////
 // NPC
 
 const npc = new NPC();
 
-//////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////
 // Gane loop update
 // ---------------------------
 // Controls
-//////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
 
 window.addEventListener("keydown", function (event) {
   let isPlayerInteracting = false;
@@ -512,3 +641,10 @@ window.addEventListener("keydown", function (event) {
     }
   });
 });
+
+
+////////////////////////
+// Game Restart
+
+let restartBtn = document.getElementById("restart-btn")
+restartBtn.onclick = () => {ux.restart()}
