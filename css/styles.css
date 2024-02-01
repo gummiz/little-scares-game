@@ -164,6 +164,14 @@ html {
   font-family: "Passion One", sans-serif;
 }
 
+/* #container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+} */
+
 #header {
   height: 60px;
   width: 600px;
@@ -176,9 +184,8 @@ html {
 
 #logo {
   font-size: 2.2em;
-  color: #C4331F;
+  color: #c4331f;
   text-transform: uppercase;
-
 }
 
 #timer {
@@ -198,17 +205,14 @@ html {
   font-size: 1.4em;
 }
 
-li{
+li {
   display: inline-block;
   height: 30px;
   width: 18px;
-  background-color: #56343F;
-  list-style-type:none;
+  background-color: #56343f;
+  list-style-type: none;
   margin-right: 3px;
 }
-
-
-
 
 #board {
   background: url("../src/background.png") no-repeat;
@@ -220,62 +224,103 @@ li{
   overflow: hidden;
 }
 
-
 #start {
   height: 100%;
   width: 100%;
   background-color: #251319;
+  background: url("../src/start.webp") no-repeat;
+  background-size: contain;
+}
+
+#start > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.textcontainer {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(3px);
+  border: 1px solid rgba(0, 0, 0, 0);
+  padding: 20px 10px;
 }
 
 #start h1 {
-  font-size: 4em;
-  color: #C4331F;
+  font-size: 6em;
+  color: #c4331f;
   text-transform: uppercase;
   text-align: center;
-  padding-top: 100px;
-
+  padding-top: 40px;
+  margin-bottom: 180px;
 }
 
 #start p {
-  width: 450px;
-  font-size: 1.4em;
-  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  width: 470px;
+  font-size: 1.3em;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   line-height: 1.4em;
-  padding-bottom: 40px;
+  text-align: center;
+  padding-bottom: 20px;
 }
 
 #start-btn {
-  width: 230px;
+  width: 180px;
   background-color: #c4331f;
   color: #fff;
-  font-size: 1.5em;
+  font-size: 1.2em;
   font-weight: 800;
   font-style: normal;
   text-decoration: none;
+  text-transform: uppercase;
   padding: 10px 10px;
   border: 0px solid #000;
   border-radius: 10px;
-  display: inline-block;
+  margin: 0 auto;
+  display: block;
 }
 
-#start-btn:hover{
+#start-btn:hover {
   background-color: rgb(219, 77, 67);
   /* transform: scale(1.03); */
- }
- #start-btn:active{
+}
+#start-btn:active {
   transform: scale(0.95);
- }
-
-
-
-
+}
 
 #ghost {
+  /* background-color: rgba(255, 255, 255, 0.5); */
+  /* background: url("../src/ghost-left.png") no-repeat; */
+}
+
+.right {
   background-color: rgba(255, 255, 255, 0.5);
+  background: url("../src/ghost-right.png") no-repeat;
+}
+.left {
+  background-color: rgba(255, 255, 255, 0.5);
+  background: url("../src/ghost-left.png") no-repeat;
 }
 
 #npc {
-  background-color: rgb(128, 0, 255);
+}
+
+.npc-down {
+  background: url("../src/npc-down.png") no-repeat;
+}
+.npc-up {
+  background: url("../src/npc-up.png") no-repeat;
+}
+
+.npc-left {
+  background: url("../src/npc-left.png") no-repeat;
+}
+
+.npc-right {
+  background: url("../src/npc-right.png") no-repeat;
 }
 
 #intermediatePoint {
@@ -297,14 +342,14 @@ li{
   width: 600px;
   background-color: #251319;
   line-height: 2em;
-  color: #C4331F;
+  color: #c4331f;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-.useraction-info {
+#useraction-info {
   font-size: 1.2em;
   color: #fff;
   /* display: none; */
@@ -314,17 +359,17 @@ li{
   font-size: 2em;
 }
 
-
-
 #losing {
   height: 100%;
   width: 100%;
   background-color: #251319;
+  background: url("../src/losing.webp") no-repeat;
+  background-size: contain;
 }
 
 #losing div {
   display: flex;
-  justify-content: center;
+  justify-content: end;
   flex-direction: column;
   align-items: center;
 }
@@ -333,7 +378,8 @@ li{
   width: 350px;
   text-align: center;
   font-size: 3em;
-  padding-bottom: 40px;
+  padding-top: 50px;
+  padding-bottom: 350px;
 }
 
 #restart-btn {
@@ -350,13 +396,13 @@ li{
   display: inline-block;
 }
 
-#restart-btn:hover{
+#restart-btn:hover {
   background-color: rgb(219, 77, 67);
   /* transform: scale(1.03); */
- }
- #restart-btn:active{
+}
+#restart-btn:active {
   transform: scale(0.95);
- }
+}
 
 .hidden {
   display: none;
@@ -366,4 +412,10 @@ li{
   display: block;
 }
 
-
+#winning {
+  height: 100%;
+  width: 100%;
+  background-color: #251319;
+  background: url("../src/winning.webp") no-repeat;
+  background-size: contain;
+}

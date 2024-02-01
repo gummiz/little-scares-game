@@ -13,38 +13,44 @@
     <title>Little Scares</title>
   </head>
   <body>
-    <div id="header">
-      <!-- <div id="logo">Little Scares</div> -->
-      <!-- <div id="timer"></div> -->
-      <!-- <div id="scare-counter">
-        <div id="counter" >Scare Score</div>
-        <ul class="indicator">
-          <li class="level1"></li>
-          <li class="level2"></li>
-          <li class="level3"></li>
-          <li class="level4"></li>
-        </ul>
-      </div> -->
-    </div>
+    <div id="container">
+      <div id="header"></div>
 
-    <div id="board">
-      <div id="losing" class="hidden">
-        <div>
-          <p>You didn't scare the person!</p>
-          <button id="restart-btn">👻 Scare again</button>
+      <div id="board">
+        <div id="start" class="show">
+          <div>
+            <h1>Little Scares</h1>
+            <div class="textcontainer">
+              <p>
+                Help the little ghost scare the human by interacting with
+                objects in the room. 
+                But watch out - the human will try to undo
+                your efforts. <br />
+                Can you successfully spook them? <br /><br />
+                Use ←↑↓→  to controll the ghost.
+              
+              </p>
+              <button id="start-btn">Play</button>
+            </div>
+          </div>
+        </div>
+        <div id="losing" class="hidden">
+          <div>
+            <p>You didn't scare the person!</p>
+            <button id="restart-btn">👻 Scare again</button>
+          </div>
+        </div>
+        <div id="winning" class="hidden">
+          <div>
+            <p>Yeah, you scared them away!</p>
+            <button id="restart-btn">👻 Scare again</button>
+          </div>
         </div>
       </div>
-      <div id="start" class="show">
-        <div>
-          <h1>Little Scares</h1>
-          <p>Find objects in the room and interactact with them. This will scare the person. But be quick, as the person tries to keep sane and will work against your moves.</p>
-          <button id="start-btn">Play</button>
-        </div>
+      <div id="infoboard">
+        <p id="message"></p>
+        <p id="useraction-info"></p>
       </div>
-    </div>
-    <div id="infoboard">
-      <p id="message"></p>
-      <p class="useraction-info"></p>
     </div>
 
     <script src="js/main.js"></script>
