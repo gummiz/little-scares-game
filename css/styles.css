@@ -164,13 +164,13 @@ html {
   font-family: "Passion One", sans-serif;
 }
 
-/* #container {
+#container {
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-} */
+}
 
 #header {
   height: 60px;
@@ -244,6 +244,51 @@ li {
   left: 100px;
   transform: rotate(80deg);
 }
+
+
+.tv-screen-default {
+  background: url("../src/news.gif") no-repeat;
+  background-size: cover;
+  position: absolute;
+  width: 170px;
+  height: 58px;
+  top: 497px;
+  left: 218px;
+  /* clip-path: polygon(1% 10%, 96% 8%, 100% 99%, 0 100%); */
+  clip-path: polygon(96% 93%, 2% 93%, -1% 0%, 101% 1%);
+  transform: scaleY(-1);
+}
+.tv-screen-manipulated {
+  background: url("../src/static-screen2.gif") no-repeat;
+  background-size: cover;
+  position: absolute;
+  width: 170px;
+  height: 58px;
+  top: 497px;
+  left: 218px;
+  /* clip-path: polygon(1% 10%, 96% 8%, 100% 99%, 0 100%); */
+  clip-path: polygon(96% 93%, 2% 93%, -1% 0%, 101% 1%);
+  transform: scaleY(-1);
+}
+
+.lamp-top-left-manipulated {
+  background: url("../src/lamp-top-left.png") no-repeat;
+  background-size: contain;
+  position: absolute;
+  height: 228px;
+  width: 255px;
+}
+
+#lamp-right-state {
+  background: url("../src/lamp-right.png") no-repeat;
+  background-size: contain;
+  position: absolute;
+  width: 239px;
+  height: 518px;
+  right: 0;
+}
+
+
 
 
 #ghost-start {
@@ -334,8 +379,7 @@ li {
 }
 
 #ghost {
-  /* background-color: rgba(255, 255, 255, 0.5); */
-  /* background: url("../src/ghost-left.png") no-repeat; */
+  z-index: 1;
 }
 
 .right {
@@ -348,6 +392,7 @@ li {
 }
 
 #npc {
+  z-index: 1;
 }
 
 .npc-down {

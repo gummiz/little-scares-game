@@ -8,7 +8,7 @@ class Game {
 
     ////////////////////////////////////////////////////////////
     // set time in sec
-    this.timeTotal = 60; // 2min
+    this.timeTotal = 260; // 2min
 
     this.intervalTimer = null;
   }
@@ -66,11 +66,29 @@ class Game {
     document.getElementById("ghost").setAttribute("class", "show left");
     document.getElementById("npc").setAttribute("class", "show npc-down");
 
-    // PLace boook
-    const book = document.createElement("div");
-    book.setAttribute("id", "book");
-    book.setAttribute("class", "book-default");
-    board.appendChild(book);
+    // Place boook
+    this.book = document.createElement("div");
+    this.book.setAttribute("id", "book");
+    this.book.setAttribute("class", "book-default");
+    board.appendChild(this.book);
+
+    // Setup TV
+    this.tvScreen = document.createElement("div");
+    this.tvScreen.setAttribute("id", "tv-screen");
+    this.tvScreen.setAttribute("class", "tv-screen-default");
+    board.appendChild(this.tvScreen);
+
+    // add lamp top left
+    this.lampTopLeft = document.createElement("div");
+    this.lampTopLeft.setAttribute("id", "lamp-top-left-state");
+    this.lampTopLeft.setAttribute("class", "lamp-top-left-manipulated hidden");
+    board.appendChild(this.lampTopLeft);
+
+    // add lamp right
+    this.lampRight = document.createElement("div");
+    this.lampRight.setAttribute("id", "lamp-right-state");
+    this.lampRight.setAttribute("class", "hidden");
+    board.appendChild(this.lampRight);
 
     this.startCountdown();
   }
@@ -166,6 +184,9 @@ class Game {
     let ghost = document.getElementById("ghost").remove();
     let npc = document.getElementById("npc").remove();
 
+    // remove interactive object images
+    document.getElementById("book").remove();
+
     // hide bottom bar
     document.getElementById("message").setAttribute("class", "hidden");
     let useraction = document.getElementById("useraction-info");
@@ -188,6 +209,9 @@ class Game {
     // hidde npc and ghost
     let ghost = document.getElementById("ghost").remove();
     let npc = document.getElementById("npc").remove();
+
+    // remove interactive object images
+    document.getElementById("book").remove();
 
     // hide bar
     document.getElementById("message").setAttribute("class", "hidden");
@@ -239,27 +263,27 @@ class Ghost {
   }
 
   moveUp() {
-    if (this.ghost.getBoundingClientRect().top > 90) {
+    if (this.y > 50) {
       this.y -= this.speed;
       this.ghost.style.top = this.y - this.width / 2 + "px";
     }
   }
   moveDown() {
-    if (this.ghost.getBoundingClientRect().bottom < 590) {
+    if (this.y < 510) {
       this.y += this.speed;
       this.ghost.style.top = this.y - this.width / 2 + "px";
     }
   }
   moveLeft() {
     this.ghost.setAttribute("class", "left");
-    if (this.ghost.getBoundingClientRect().left > 50) {
+    if (this.x > 70) {
       this.x -= this.speed;
       this.ghost.style.left = this.x - this.width / 2 + "px";
     }
   }
   moveRight() {
     this.ghost.setAttribute("class", "right");
-    if (this.ghost.getBoundingClientRect().right < 555) {
+    if (this.x < 525) {
       this.x += this.speed;
       this.ghost.style.left = this.x - this.width / 2 + "px";
     }
@@ -386,6 +410,9 @@ class InteractiveObject {
           npc.actionQueue.push("waypoint");
           npc.actionQueue.push(object.name);
 
+          const tvScreen = document.getElementById("tv-screen");
+          tvScreen.setAttribute("class", "tv-screen-manipulated ");
+
           game.scareCounterPlus();
           break;
 
@@ -407,12 +434,16 @@ class InteractiveObject {
 
         // Lamp top left
         case "lamp-top-left":
-          this.infoBoardMessage.innerText = "The standing lamp is turn off";
+          this.infoBoardMessage.innerText = "The standing lamp is turned off";
           this.wasManipulated = true;
 
           // Add waypoint and next object to queue of the NPC Class
           npc.actionQueue.push("waypoint");
           npc.actionQueue.push(object.name);
+
+          // light off
+          const lampTopLeft = document.getElementById("lamp-top-left-state");
+          lampTopLeft.setAttribute("class", "lamp-top-left-manipulated show");
 
           game.scareCounterPlus();
           break;
@@ -425,6 +456,10 @@ class InteractiveObject {
           // Add waypoint and next object to queue of the NPC Class
           npc.actionQueue.push("waypoint");
           npc.actionQueue.push(object.name);
+
+          // lamp off
+          let lampRight = document.getElementById("lamp-right-state");
+          lampRight.setAttribute("class", "show");
 
           game.scareCounterPlus();
           break;
@@ -608,12 +643,12 @@ class NPC {
     switch (object.name) {
       // TV
       case "tv":
-     
+        const tvScreen = document.getElementById("tv-screen");
+        tvScreen.setAttribute("class", "tv-screen-default");
         break;
 
       // PEN
       case "pen":
-
         // book on the floor
         const book = document.getElementById("book");
         book.setAttribute("class", "book-default");
@@ -622,27 +657,16 @@ class NPC {
 
       // Lamp top left
       case "lamp-top-left":
-     
+        const lampLeft = document.getElementById("lamp-top-left-state");
+        lampLeft.setAttribute("class", "lamp-top-left-manipulated hidden");
         break;
 
       // Lamp right
       case "lamp-right":
-
+        let lampRight = document.getElementById("lamp-right-state");
+          lampRight.setAttribute("class", "hidden");
         break;
     }
-
-    // The NPC need to act now, handing over the object that was triggered
-    // console.log("new Object Array", npc.actionQueue);
-
-    // if (!npc.isMoving) {
-    //   console.log("objects on trigger", npc.actionQueue);
-    //   let nextTarget = npc.actionQueue[0];
-    //   npc.setTarget(nextTarget === "waypoint" ? waypoint : object);
-    // }
-
-    // // remove Spacebar message
-    // this.userActionInfo = document.querySelector("#useraction-info");
-    // this.userActionInfo.innerText = "";
   }
   npcMoveToSofa() {
     // move back to sofa if nothing is left to go to
@@ -731,6 +755,24 @@ game.startScreen();
 const npc = new NPC();
 
 //////////////////////////////////////////////////////////////////////////////////////////
+
+// // Place boook
+// let book = document.createElement("div");
+// book .setAttribute("id", "book");
+// book .setAttribute("class", "book-default");
+// board.appendChild(book );
+
+// // Setup TV
+// let tvScreen = document.createElement("div");
+// tvScreen.setAttribute("id", "tv-screen");
+// tvScreen.setAttribute("class", "tv-screen-default");
+// board.appendChild(tvScreen);
+
+// // add lamp top left
+// let lampTopLeft = document.createElement("div");
+// lampTopLeft.setAttribute("id", "lamp-top-left-state");
+// lampTopLeft.setAttribute("class", "lamp-top-left-manipulated hidden");
+// board.appendChild(lampTopLeft);
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Gane loop update
