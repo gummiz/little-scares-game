@@ -8,7 +8,7 @@ class Game {
 
     ////////////////////////////////////////////////////////////
     // set time in sec
-    this.timeTotal = 260; // 2min
+    this.timeTotal = 60; // 2min
 
     this.intervalTimer = null;
   }
@@ -186,6 +186,9 @@ class Game {
 
     // remove interactive object images
     document.getElementById("book").remove();
+    document.getElementById("tv-screen").remove();
+    document.getElementById("lamp-top-left-state").remove();
+    document.getElementById("lamp-right-state").remove();
 
     // hide bottom bar
     document.getElementById("message").setAttribute("class", "hidden");
@@ -212,6 +215,9 @@ class Game {
 
     // remove interactive object images
     document.getElementById("book").remove();
+    document.getElementById("tv-screen").remove();
+    document.getElementById("lamp-top-left-state").remove();
+    document.getElementById("lamp-right-state").remove();
 
     // hide bar
     document.getElementById("message").setAttribute("class", "hidden");
@@ -403,7 +409,7 @@ class InteractiveObject {
       switch (object.name) {
         // TV
         case "tv":
-          this.infoBoardMessage.innerText = "The TV has a bug now";
+          this.infoBoardMessage.innerText = "No more TV for the human";
           this.wasManipulated = true;
 
           // Add waypoint and next object to queue of the NPC Class
@@ -418,7 +424,7 @@ class InteractiveObject {
 
         // PEN
         case "pen":
-          this.infoBoardMessage.innerText = "The Book is now on the floor!";
+          this.infoBoardMessage.innerText = "Steven King is nothing compared to my work.";
           this.wasManipulated = true;
 
           // Add waypoint and next object to queue of the NPC Class
@@ -434,7 +440,7 @@ class InteractiveObject {
 
         // Lamp top left
         case "lamp-top-left":
-          this.infoBoardMessage.innerText = "The standing lamp is turned off";
+          this.infoBoardMessage.innerText = "Save some energy little human";
           this.wasManipulated = true;
 
           // Add waypoint and next object to queue of the NPC Class
@@ -450,7 +456,7 @@ class InteractiveObject {
 
         // Lamp right
         case "lamp-right":
-          this.infoBoardMessage.innerText = "The light is off!";
+          this.infoBoardMessage.innerText = "Darkness suits this room better";
           this.wasManipulated = true;
 
           // Add waypoint and next object to queue of the NPC Class
@@ -664,7 +670,7 @@ class NPC {
       // Lamp right
       case "lamp-right":
         let lampRight = document.getElementById("lamp-right-state");
-          lampRight.setAttribute("class", "hidden");
+        lampRight.setAttribute("class", "hidden");
         break;
     }
   }
@@ -756,24 +762,6 @@ const npc = new NPC();
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-// // Place boook
-// let book = document.createElement("div");
-// book .setAttribute("id", "book");
-// book .setAttribute("class", "book-default");
-// board.appendChild(book );
-
-// // Setup TV
-// let tvScreen = document.createElement("div");
-// tvScreen.setAttribute("id", "tv-screen");
-// tvScreen.setAttribute("class", "tv-screen-default");
-// board.appendChild(tvScreen);
-
-// // add lamp top left
-// let lampTopLeft = document.createElement("div");
-// lampTopLeft.setAttribute("id", "lamp-top-left-state");
-// lampTopLeft.setAttribute("class", "lamp-top-left-manipulated hidden");
-// board.appendChild(lampTopLeft);
-
 //////////////////////////////////////////////////////////////////////////////////////////
 // Gane loop update
 // ---------------------------
@@ -841,15 +829,12 @@ window.addEventListener("keydown", function (event) {
 
 let restartBtn = document.getElementById("restart-btn");
 restartBtn.onclick = () => {
-  // game.restart()
-  // game.play();
   window.location.reload();
+
 };
 
 let restartBtnWin = document.getElementById("restart-btn-win");
 restartBtnWin.onclick = () => {
-  // game.restart()
-  // game.play();
   window.location.reload();
 };
 

@@ -164,6 +164,10 @@ html {
   font-family: "Passion One", sans-serif;
 }
 
+span {
+  color: #c4331f;
+}
+
 #container {
   position: relative;
   display: flex;
