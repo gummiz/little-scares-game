@@ -10,4 +10,4 @@ You can control the little ghost using the arrow keys. To interact with an objec
 
 Here you can find a one level demo of the game:
 
-[<kbd> <br> Play the Demo <br> </kbd>][https://gummiz.github.io/little-scares-game]
+[Play the Demo](https://gummiz.github.io/little-scares-game)
