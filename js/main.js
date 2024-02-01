@@ -8,8 +8,9 @@ class Game {
 
     ////////////////////////////////////////////////////////////
     // set time in sec
-    this.timeTotal = 85; // 2min
+    this.timeTotal = 60; // 2min
 
+    this.intervalTimer = null;
   }
 
   startScreen() {}
@@ -49,7 +50,6 @@ class Game {
 
     document.getElementById("header").appendChild(scareCounter);
 
-    
     this.minutes = Math.floor(this.timeTotal / 60)
       .toString()
       .padStart(2, "0");
@@ -65,6 +65,12 @@ class Game {
     // show ghost and npc
     document.getElementById("ghost").setAttribute("class", "show left");
     document.getElementById("npc").setAttribute("class", "show npc-down");
+
+    // PLace boook
+    const book = document.createElement("div");
+    book.setAttribute("id", "book");
+    book.setAttribute("class", "book-default");
+    board.appendChild(book);
 
     this.startCountdown();
   }
@@ -131,13 +137,14 @@ class Game {
 
       let minutes = Math.floor(timer / 60);
       let seconds = timer % 60;
-      console.log(minutes, seconds);
+      // console.log(minutes, seconds);
 
       this.timer.innerText = `${formatTime(minutes)}:${formatTime(seconds)}`;
 
       if (timer <= 0) {
         // you have lost
-        this.losingScreen()
+        clearInterval(this.intervalTimer);
+        this.losingScreen();
       }
     }, 1000);
 
@@ -149,59 +156,46 @@ class Game {
     }
   }
 
-  restart() {
-    console.log("Restart");
-    //hidde loosing screen
-    let loosingScreen = document.getElementById("loosing");
-    loosingScreen.setAttribute("class", "hidden");
-
-    // show player and NPC
-    let player = document.getElementById("ghost");
-    let npc = document.getElementById("npc");
-
-    this.startCountdown();
-  }
-
   losingScreen() {
-    console.log("You loose!");
-        clearInterval(this.intervalTimer);
+    clearInterval(this.intervalTimer);
+    //show loosing screen
+    let losingScreen = document.getElementById("losing");
+    losingScreen.setAttribute("class", "show");
 
-        //show loosing screen
-        let losingScreen = document.getElementById("losing");
-        losingScreen.setAttribute("class", "show");
+    // hidde npc and ghost
+    let ghost = document.getElementById("ghost").remove();
+    let npc = document.getElementById("npc").remove();
 
-        // hidde npc and ghost
-        let ghost = document.getElementById("ghost").remove()
-        let npc = document.getElementById("npc").remove()
+    // hide bottom bar
+    document.getElementById("message").setAttribute("class", "hidden");
+    let useraction = document.getElementById("useraction-info");
+    useraction.classList.add("hidden");
 
-        // hide bottom bar
-        document.getElementById("message").setAttribute("class", "hidden");
-        let useraction = document.getElementById("useraction-info");
-        useraction.classList.add("hidden");
-
-        document.getElementById("timer").remove();
-        document.getElementById("scare-counter").remove();
-        document.getElementById("header").style.justifyContent = "center";
+    // remove top bar
+    document.getElementById("logo").remove();
+    document.getElementById("timer").remove();
+    document.getElementById("scare-counter").remove();
+    document.getElementById("header").style.justifyContent = "center";
   }
   winScreen() {
     console.log("You won!");
     clearInterval(this.intervalTimer);
 
-    //show loosing screen
+    //show winning screen
     let winningScreen = document.getElementById("winning");
     winningScreen.setAttribute("class", "show");
 
     // hidde npc and ghost
-    let ghost = document.getElementById("ghost");
-    ghost.setAttribute("class", "hidden");
-    let npc = document.getElementById("npc");
-    npc.setAttribute("class", "hidden");
+    let ghost = document.getElementById("ghost").remove();
+    let npc = document.getElementById("npc").remove();
 
     // hide bar
     document.getElementById("message").setAttribute("class", "hidden");
     let useraction = document.getElementById("useraction-info");
     useraction.classList.add("hidden");
 
+    // remove top bar
+    document.getElementById("logo").remove();
     document.getElementById("timer").remove();
     document.getElementById("scare-counter").remove();
     document.getElementById("header").style.justifyContent = "center";
@@ -216,8 +210,8 @@ class Ghost {
   constructor() {
     this.x = 300;
     this.y = 300;
-    this.height = 30;
-    this.width = 30;
+    this.height = 50;
+    this.width = 50;
 
     // character setting
     this.speed = 10;
@@ -257,14 +251,14 @@ class Ghost {
     }
   }
   moveLeft() {
-    this.ghost.setAttribute("class", "left")
+    this.ghost.setAttribute("class", "left");
     if (this.ghost.getBoundingClientRect().left > 50) {
       this.x -= this.speed;
       this.ghost.style.left = this.x - this.width / 2 + "px";
     }
   }
   moveRight() {
-    this.ghost.setAttribute("class", "right")
+    this.ghost.setAttribute("class", "right");
     if (this.ghost.getBoundingClientRect().right < 555) {
       this.x += this.speed;
       this.ghost.style.left = this.x - this.width / 2 + "px";
@@ -368,6 +362,7 @@ class InteractiveObject {
           // console.log("PEN");
           this.infoBoardMessage.innerText = "Throw down the book";
           this.userActionInfo.innerText = "» Press Space «";
+
           break;
       }
     }
@@ -402,6 +397,10 @@ class InteractiveObject {
           // Add waypoint and next object to queue of the NPC Class
           npc.actionQueue.push("waypoint");
           npc.actionQueue.push(object.name);
+
+          // book on the floor
+          const book = document.getElementById("book");
+          book.setAttribute("class", "book-floor");
 
           game.scareCounterPlus();
           break;
@@ -509,7 +508,6 @@ class NPC {
     if (object.name === "waypoint") {
       this.targetX = this.waypointX;
       this.targetY = this.waypointY;
-      
     } else if (npc.actionQueue.length === 0) {
       this.targetX = this.x - this.height / 2;
       this.targetY = this.y - this.width / 2;
@@ -538,19 +536,19 @@ class NPC {
       // Move along X axis
       if (this.targetX > this.currentX) {
         this.currentX += this.speed;
-        this.npc.setAttribute("class", "npc-right")
+        this.npc.setAttribute("class", "npc-right");
       } else if (this.targetX < this.currentX) {
-        this.npc.setAttribute("class", "npc-left")
+        this.npc.setAttribute("class", "npc-left");
         this.currentX -= this.speed;
       }
-      
+
       // Move along Y axis
       if (this.targetY > this.currentY) {
         this.currentY += this.speed;
-        this.npc.setAttribute("class", "npc-down")
+        this.npc.setAttribute("class", "npc-down");
       } else if (this.targetY < this.currentY) {
         this.currentY -= this.speed;
-        this.npc.setAttribute("class", "npc-up")
+        this.npc.setAttribute("class", "npc-up");
       }
 
       this.npc.style.left = this.currentX + "px";
@@ -574,6 +572,10 @@ class NPC {
         this.currentTarget.wasManipulated = false;
         this.isMoving = false; // Stop moving once target is reached
         this.isNavigating = false; // Stop navigating once target is reached
+
+        if (this.currentTarget.name !== "waypoint") {
+          this.npcInteracts(this.currentTarget);
+        }
 
         if (
           this.currentTarget.name !== "waypoint" &&
@@ -600,6 +602,47 @@ class NPC {
         setTimeout(this.moveNPC.bind(this), 100); // Adjust delay as needed
       }
     }
+  }
+
+  npcInteracts(object) {
+    switch (object.name) {
+      // TV
+      case "tv":
+     
+        break;
+
+      // PEN
+      case "pen":
+
+        // book on the floor
+        const book = document.getElementById("book");
+        book.setAttribute("class", "book-default");
+
+        break;
+
+      // Lamp top left
+      case "lamp-top-left":
+     
+        break;
+
+      // Lamp right
+      case "lamp-right":
+
+        break;
+    }
+
+    // The NPC need to act now, handing over the object that was triggered
+    // console.log("new Object Array", npc.actionQueue);
+
+    // if (!npc.isMoving) {
+    //   console.log("objects on trigger", npc.actionQueue);
+    //   let nextTarget = npc.actionQueue[0];
+    //   npc.setTarget(nextTarget === "waypoint" ? waypoint : object);
+    // }
+
+    // // remove Spacebar message
+    // this.userActionInfo = document.querySelector("#useraction-info");
+    // this.userActionInfo.innerText = "";
   }
   npcMoveToSofa() {
     // move back to sofa if nothing is left to go to
@@ -638,9 +681,9 @@ class NPC {
         console.log(
           `NPC reached target ${this.currentTarget.name}. Array: ${npc.actionQueue}`
         );
-        
-          // change npc sprite position
-          this.npc.setAttribute("class", "npc-down")
+
+        // change npc sprite position
+        this.npc.setAttribute("class", "npc-down");
 
         // change state of the interacted object back to default
         this.currentTarget.wasManipulated = false;
@@ -653,7 +696,6 @@ class NPC {
     }
   }
 }
-
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Game init
@@ -757,6 +799,13 @@ window.addEventListener("keydown", function (event) {
 
 let restartBtn = document.getElementById("restart-btn");
 restartBtn.onclick = () => {
+  // game.restart()
+  // game.play();
+  window.location.reload();
+};
+
+let restartBtnWin = document.getElementById("restart-btn-win");
+restartBtnWin.onclick = () => {
   // game.restart()
   // game.play();
   window.location.reload();

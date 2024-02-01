@@ -224,6 +224,48 @@ li {
   overflow: hidden;
 }
 
+.book-default {
+  background: url("../src/Book.png") no-repeat;
+  background-size: contain;
+  position: absolute;
+  width: 39px;
+  height: 47px;
+  top: 340px;
+  left: 50px;
+}
+
+.book-floor {
+  background: url("../src/Book.png") no-repeat;
+  background-size: contain;
+  position: absolute;
+  width: 39px;
+  height: 47px;
+  top: 370px;
+  left: 100px;
+  transform: rotate(80deg);
+}
+
+
+#ghost-start {
+  background: url("../src/ghost-start.png") no-repeat;
+  height: 256px;
+  width: 291px;
+  position: absolute;
+  animation: MoveUpDown 3s ease-in-out infinite;
+ 
+}
+
+@keyframes MoveUpDown {
+  0%, 100% {
+    bottom: 260px;
+  }
+  50% {
+    bottom: 280px;
+  }
+
+  
+}
+
 #start {
   height: 100%;
   width: 100%;
@@ -374,12 +416,41 @@ li {
   align-items: center;
 }
 
+h4 {
+  font-size: 1.4em;
+  padding-top: 40px;
+  text-transform: uppercase;
+  color: #c4331f;
+}
+
 #losing p {
   width: 350px;
   text-align: center;
   font-size: 3em;
-  padding-top: 50px;
+  padding-top: 10px;
   padding-bottom: 350px;
+}
+
+#restart-btn-win {
+  width: 230px;
+  background-color: #c4331f;
+  color: #fff;
+  font-size: 1.5em;
+  font-weight: 800;
+  font-style: normal;
+  text-decoration: none;
+  padding: 10px 10px;
+  border: 0px solid #000;
+  border-radius: 10px;
+  display: inline-block;
+}
+
+#restart-btn-win:hover {
+  background-color: rgb(219, 77, 67);
+  /* transform: scale(1.03); */
+}
+#restart-btn-win:active {
+  transform: scale(0.95);
 }
 
 #restart-btn {
@@ -404,6 +475,7 @@ li {
   transform: scale(0.95);
 }
 
+
 .hidden {
   display: none;
 }
@@ -418,4 +490,24 @@ li {
   background-color: #251319;
   background: url("../src/winning.webp") no-repeat;
   background-size: contain;
+}
+
+
+
+#winning div {
+  display: flex;
+  justify-content: end;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+
+
+#winning p {
+  width: 350px;
+  text-align: center;
+  font-size: 3em;
+  padding-top: 10px;
+  padding-bottom: 350px;
 }
