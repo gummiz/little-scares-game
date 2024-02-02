@@ -1,6 +1,6 @@
 # Readme
 
-![Little Scares Hero Img](https://prod-files-secure.s3.us-west-2.amazonaws.com/933e682d-ec2a-4233-9ceb-eedb050967e8/bf7459e7-f2f0-4ef1-92b6-4c66da0ed1bb/Untitled.png)
+[![Little Scares Hero Img](./src/hero.png)]
 
 ### Description
 
@@ -14,4 +14,4 @@ You can control the little ghost using the arrow keys. To interact with an objec
 
 Here you can find a one level demo of the game:
 
-[<kbd> <br> Play the Demo <br> </kbd>]([https://gummiz.github.io/little-scares-game](https://gummiz.github.io/little-scares-game/?asd))
+[<kbd> <br> Play the Demo <br> </kbd>](https://gummiz.github.io/little-scares-game/)
