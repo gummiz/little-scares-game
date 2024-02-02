@@ -159,7 +159,7 @@ select {
 body,
 html {
   font-size: 16px;
-  background-color: #000;
+  background-color: #251319;
   color: #fff;
   font-family: "Passion One", sans-serif;
 }
@@ -337,7 +337,7 @@ li {
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(3px);
   border: 1px solid rgba(0, 0, 0, 0);
-  padding: 20px 10px;
+  padding: 10px 10px;
 }
 
 #start h1 {
@@ -355,7 +355,7 @@ li {
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   line-height: 1.4em;
   text-align: center;
-  padding-bottom: 20px;
+  padding-bottom: 5px;
 }
 
 #start-btn {
@@ -372,6 +372,8 @@ li {
   border-radius: 10px;
   margin: 0 auto;
   display: block;
+  position: relative;
+  top: 20px
 }
 
 #start-btn:hover {

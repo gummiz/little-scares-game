@@ -8,7 +8,7 @@ class Game {
 
     ////////////////////////////////////////////////////////////
     // set time in sec
-    this.timeTotal = 60; // 2min
+    this.timeTotal = 60; // 1min
 
     this.intervalTimer = null;
   }
@@ -159,6 +159,16 @@ class Game {
 
       this.timer.innerText = `${formatTime(minutes)}:${formatTime(seconds)}`;
 
+      // Message if time is running out
+      if (timer === 10) {
+        this.infoBoardMessage = document.getElementById("message");
+        this.infoBoardMessage.innerText = "Hurry, only 10 sec left!";
+        setTimeout(()=> {
+          this.infoBoardMessage.innerText = "";
+        }, 3000)
+      }
+
+      // send user to losing screen as time is over
       if (timer <= 0) {
         // you have lost
         clearInterval(this.intervalTimer);
@@ -374,7 +384,7 @@ class InteractiveObject {
       switch (object) {
         case "tv":
           // console.log("TV");
-          this.infoBoardMessage.innerText = "Interfere with the television";
+          this.infoBoardMessage.innerText = "Interfere with the TV";
           this.userActionInfo.innerText = "» Press Space «";
 
           break;
@@ -424,7 +434,8 @@ class InteractiveObject {
 
         // PEN
         case "pen":
-          this.infoBoardMessage.innerText = "Steven King is nothing compared to my work.";
+          this.infoBoardMessage.innerText =
+            "Steven King is nothing compared to my work.";
           this.wasManipulated = true;
 
           // Add waypoint and next object to queue of the NPC Class
@@ -830,7 +841,6 @@ window.addEventListener("keydown", function (event) {
 let restartBtn = document.getElementById("restart-btn");
 restartBtn.onclick = () => {
   window.location.reload();
-
 };
 
 let restartBtnWin = document.getElementById("restart-btn-win");
